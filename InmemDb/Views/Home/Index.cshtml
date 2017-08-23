@@ -1,5 +1,88 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<InmemDb.Models.Dish>
+
+@{
+    ViewData["Title"] = "Index";
 }
 
-homepage
+<h2>Index</h2>
+<div class="col-lg-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="font-size:30px;background-color:green;color:white;">Pizza</th>
+                <th></th>
+                <th>@Html.DisplayNameFor(model => model.Price)</th>
+                <th>ingr</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @if(item.Category.Name == "Pizza")
+                { 
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <th></th>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td></td>
+                    <td><input asp-action="BuyOut" type="button" value="Buy" /></td>
+                </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="col-lg-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="font-size:30px;background-color:white;color:black;">Pasta</th>
+                <th>@Html.DisplayNameFor(model => model.Price)</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @if (item.Category.Name == "Pasta")
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                        <td></td>
+                        <td><input asp-action="BuyOut" type="button" value="Buy" /></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="col-lg-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="font-size:30px;background-color:red;color:white;">Salad</th>
+                <th>@Html.DisplayNameFor(model => model.Price)</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @if (item.Category.Name == "Salad")
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                        <td></td>
+                        <td><input asp-action="BuyOut" type="button" value="Buy" /></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="col-lg-3"></div>

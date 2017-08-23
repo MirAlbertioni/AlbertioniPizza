@@ -49,8 +49,18 @@ namespace InmemDb.Controllers
         }
 
         // GET: Dishes/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id, Ingredient ingredient)
         {
+            var dish = new Dish();
+            //{
+            //    DishIngredients = new Ingredient
+            //    {
+            //        Name = ingredient.Name
+            //    };
+            //};
+
+            ViewData["categoryList"] = new SelectList(_context.Category, "CategoryId", "Name", dish.CategoryId);
+
             return View();
         }
 
@@ -59,11 +69,19 @@ namespace InmemDb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DishId,Name,Price")] Dish dish)
+        public async Task<IActionResult> Create([Bind("DishId,Name,Price")] Dish dish, Category category)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(dish);
+                Dish newDish = new Dish
+                {
+                    DishId = dish.DishId,
+                    Name = dish.Name,
+                    DishIngredients = dish.DishIngredients,
+                    CategoryId = category.CategoryId,
+                    Price = dish.Price
+                };
+                _context.Add(newDish);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -79,6 +97,7 @@ namespace InmemDb.Controllers
             }
 
             var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
+            
 
             ViewData["categoryList"] = new SelectList(_context.Category, "CategoryId", "Name", dish.CategoryId);
 
@@ -94,7 +113,7 @@ namespace InmemDb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price")] Dish dish)
+        public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price")] Dish dish, Category category)
         {
             if (id != dish.DishId)
             {
@@ -105,7 +124,15 @@ namespace InmemDb.Controllers
             {
                 try
                 {
-                    _context.Update(dish);
+                    Dish updateDish = new Dish
+                    {
+                        DishId = dish.DishId,
+                        Name = dish.Name,
+                        DishIngredients = dish.DishIngredients,
+                        CategoryId = category.CategoryId,
+                        Price = dish.Price
+                    };
+                    _context.Update(updateDish);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

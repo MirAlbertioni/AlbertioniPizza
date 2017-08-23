@@ -1,4 +1,5 @@
 ﻿@model InmemDb.Models.Dish
+@inject InmemDb.Services.IngredientService ingredientService
 
 @{
     ViewData["Title"] = "Create";
@@ -19,13 +20,23 @@
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <input type="text" asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
 
+            <div class="form-group">
+                <select style="width:100%" class="list-group-item" asp-for="CategoryId" asp-items="ViewBag.categoryList"></select>
+            </div>
 
+            @foreach (var ingredient in ingredientService.All())
+            {
+                <div class="col-lg-6">
+                    
+                    <input type="checkbox" value="name" />
+                    <span>@ingredient.Name</span>
+                </div>
+            }
 
-                
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
