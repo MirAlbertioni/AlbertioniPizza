@@ -17,15 +17,15 @@ namespace InmemDb.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<DishIngridient>()
+            builder.Entity<DishIngredient>()
                 .HasKey(di => new { di.DishId, di.IngridientId });
 
-            builder.Entity<DishIngridient>()
+            builder.Entity<DishIngredient>()
                 .HasOne(di => di.Ingridient)
                 .WithMany(d => d.DishIngridients)
                 .HasForeignKey(di => di.IngridientId);
 
-            builder.Entity<DishIngridient>()
+            builder.Entity<DishIngredient>()
                 .HasOne(di => di.Dish)
                 .WithMany(d => d.DishIngridients)
                 .HasForeignKey(di => di.DishId);
@@ -38,6 +38,7 @@ namespace InmemDb.Data
 
         public DbSet<Dish> Dishes { get; set; }
         public DbSet<Ingridient> Ingridients { get; set; }
-        public DbSet<DishIngridient> DishIngridients { get; set; }
+        public DbSet<DishIngredient> DishIngridients { get; set; }
+        public DbSet<Category> Category { get; set; }
     }
 }
