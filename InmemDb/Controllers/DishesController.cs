@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using InmemDb.Data;
 using InmemDb.Models;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 
 namespace InmemDb.Controllers
 {
@@ -66,7 +67,7 @@ namespace InmemDb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DishId,Name,Price")] Dish dish, Category category)
+        public async Task<IActionResult> Create([Bind("DishId,Name,Price")] Dish dish, Category category, IFormCollection form, int id)
         {
             if (ModelState.IsValid)
             {
@@ -79,9 +80,19 @@ namespace InmemDb.Controllers
                     Price = dish.Price
                 };
 
+                string[] AllStrings = form["ingredient-"];
+                foreach (var item in AllStrings)
+                {
+
+                }
+
+                //foreach (var key in form.Keys.Where(x => x.StartsWith("ingredient-")))
+                //{
+                //    Debug.WriteLine(key + ": ");
+                //}
 
 
-                _context.Add(newDish);
+                //_context.Add(newDish);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
