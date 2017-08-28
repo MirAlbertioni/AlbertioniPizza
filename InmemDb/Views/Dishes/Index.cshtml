@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<InmemDb.Models.Dish>
+@inject InmemDb.Services.IngredientService _ingredients
 
 @{
     ViewData["Title"] = "Index";
@@ -14,6 +15,8 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Price)
@@ -33,6 +36,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
+                <th>
+                    @_ingredients.AllToStringForDishId(item.DishId)
+                </th>
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>

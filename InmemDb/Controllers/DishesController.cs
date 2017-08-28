@@ -21,9 +21,14 @@ namespace InmemDb.Controllers
         }
 
         // GET: Dishes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
             var catlist = _context.Category.ToList();
+
+            var dish = _context.Dishes
+                .Include(d => d.DishIngredients)
+                .ThenInclude(di => di.Ingredient);
+
             return View(await _context.Dishes.ToListAsync());
         }
 
@@ -49,16 +54,8 @@ namespace InmemDb.Controllers
         }
 
         // GET: Dishes/Create
-        public IActionResult Create(int? id, Ingredient ingredient)
+        public IActionResult Create(int? id, Dish dish)
         {
-            var dish = new Dish();
-            //{
-            //    DishIngredients = new Ingredient
-            //    {
-            //        Name = ingredient.Name
-            //    };
-            //};
-
             ViewData["categoryList"] = new SelectList(_context.Category, "CategoryId", "Name", dish.CategoryId);
 
             return View();
@@ -81,6 +78,9 @@ namespace InmemDb.Controllers
                     CategoryId = category.CategoryId,
                     Price = dish.Price
                 };
+
+
+
                 _context.Add(newDish);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
