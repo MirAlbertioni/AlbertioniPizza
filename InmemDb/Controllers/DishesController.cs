@@ -9,16 +9,19 @@ using InmemDb.Data;
 using InmemDb.Models;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
+using InmemDb.Services;
 
 namespace InmemDb.Controllers
 {
     public class DishesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IngredientService _ingredientService;
 
-        public DishesController(ApplicationDbContext context)
+        public DishesController(ApplicationDbContext context, IngredientService ingredientService)
         {
             _context = context;
+            _ingredientService = ingredientService;
         }
 
         // GET: Dishes
@@ -67,32 +70,23 @@ namespace InmemDb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DishId,Name,Price")] Dish dish, Category category, IFormCollection form, int id)
+        public async Task<IActionResult> Create([Bind("DishId,Name,Price,CategoryId")] Dish dish, IFormCollection form, int id)
         {
             if (ModelState.IsValid)
             {
-                Dish newDish = new Dish
-                {
-                    DishId = dish.DishId,
-                    Name = dish.Name,
-                    DishIngredients = dish.DishIngredients,
-                    CategoryId = category.CategoryId,
-                    Price = dish.Price
-                };
+                var addIngredients = _ingredientService.All();
 
-                string[] AllStrings = form["ingredient-"];
-                foreach (var item in AllStrings)
+                foreach (var ingredient in addIngredients)
                 {
-
+                    var dishIngredient = new DishIngredient
+                    {
+                        Ingredient = ingredient,
+                        Dish = dish,
+                        Enabled = form.Keys.Any(x => x == $"ingredient-{ingredient.IngredientId}")
+                    };
+                    _context.DishIngredients.Add(dishIngredient);
                 }
 
-                //foreach (var key in form.Keys.Where(x => x.StartsWith("ingredient-")))
-                //{
-                //    Debug.WriteLine(key + ": ");
-                //}
-
-
-                //_context.Add(newDish);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -109,7 +103,6 @@ namespace InmemDb.Controllers
 
             var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
             
-
             ViewData["categoryList"] = new SelectList(_context.Category, "CategoryId", "Name", dish.CategoryId);
 
             if (dish == null)
@@ -124,7 +117,7 @@ namespace InmemDb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price")] Dish dish, Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price,CategoryId")] Dish dish, IFormCollection form)
         {
             if (id != dish.DishId)
             {
@@ -133,30 +126,20 @@ namespace InmemDb.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var addIngredients = _ingredientService.All();
+
+                foreach (var ingredient in addIngredients)
                 {
-                    Dish updateDish = new Dish
+                    var dishIngredient = new DishIngredient
                     {
-                        DishId = dish.DishId,
-                        Name = dish.Name,
-                        DishIngredients = dish.DishIngredients,
-                        CategoryId = category.CategoryId,
-                        Price = dish.Price
+                        Ingredient = ingredient,
+                        Dish = dish,
+                        Enabled = form.Keys.Any(x => x == $"ingredient-{ingredient.IngredientId}")
                     };
-                    _context.Update(updateDish);
-                    await _context.SaveChangesAsync();
+                    _context.DishIngredients.Update(dishIngredient);
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DishExists(dish.DishId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(dish);
@@ -194,6 +177,13 @@ namespace InmemDb.Controllers
         private bool DishExists(int id)
         {
             return _context.Dishes.Any(e => e.DishId == id);
+        }
+
+        public IActionResult Cart()
+        {
+
+
+            return View();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace InmemDb.Services
 
         public string AllToStringForDishId(int id)
         {
-            var ingredients = _context.DishIngredients.Include(di => di.Ingredient).Where(di => di.DishId == id);
+            var ingredients = _context.DishIngredients.Include(di => di.Ingredient).Where(di => di.DishId == id && di.Enabled);
             string allIngredients = "";
             foreach (var ing in ingredients)
             {

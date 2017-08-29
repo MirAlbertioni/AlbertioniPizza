@@ -57,9 +57,9 @@ namespace InmemDb.Models
 
                 //Pizza
                 var pCappricciosa = new Dish { Name = "Cappricciosa", Price = 79, Category =  pizza};
-                var pCappricciosaCheese = new DishIngredient { Dish = pCappricciosa, Ingredient = cheese };
-                var pCappricciosaTomatoe = new DishIngredient { Dish = pCappricciosa, Ingredient = tomatoe };
-                var pCappricciosaHam = new DishIngredient { Dish = pCappricciosa, Ingredient = ham };
+                var pCappricciosaCheese = new DishIngredient { Dish = pCappricciosa, Ingredient = cheese, Enabled = true };
+                var pCappricciosaTomatoe = new DishIngredient { Dish = pCappricciosa, Ingredient = tomatoe, Enabled = true };
+                var pCappricciosaHam = new DishIngredient { Dish = pCappricciosa, Ingredient = ham, Enabled = true };
                 pCappricciosa.DishIngredients = new List<DishIngredient>
                 {
                     pCappricciosaCheese,
@@ -68,8 +68,8 @@ namespace InmemDb.Models
                 };
 
                 var pMargaritha = new Dish { Name = "Margaritha", Price = 69, Category = pizza };
-                var pMargarithaCheese = new DishIngredient { Dish = pMargaritha, Ingredient = cheese };
-                var pMargarithaTomatoSauce = new DishIngredient { Dish = pMargaritha, Ingredient = tomatoSauce };
+                var pMargarithaCheese = new DishIngredient { Dish = pMargaritha, Ingredient = cheese, Enabled = true };
+                var pMargarithaTomatoSauce = new DishIngredient { Dish = pMargaritha, Ingredient = tomatoSauce, Enabled = true };
                 pMargaritha.DishIngredients = new List<DishIngredient>
                 {
                     pMargarithaCheese,
@@ -77,11 +77,11 @@ namespace InmemDb.Models
                 };
 
                 var pHawaii = new Dish { Name = "Hawaii", Price = 85, Category = pizza };
-                var pHawaiiCheese = new DishIngredient { Dish = pHawaii, Ingredient = cheese };
-                var pHawaiiTomatoSauce = new DishIngredient { Dish = pHawaii, Ingredient = tomatoSauce };
-                var pHawaiiOlives = new DishIngredient { Dish = pHawaii, Ingredient = olives };
-                var pHawaiiPickles = new DishIngredient { Dish = pHawaii, Ingredient = pickles };
-                var pHawaiiPepperoni = new DishIngredient { Dish = pHawaii, Ingredient = pepperoni };
+                var pHawaiiCheese = new DishIngredient { Dish = pHawaii, Ingredient = cheese, Enabled = true };
+                var pHawaiiTomatoSauce = new DishIngredient { Dish = pHawaii, Ingredient = tomatoSauce, Enabled = true };
+                var pHawaiiOlives = new DishIngredient { Dish = pHawaii, Ingredient = olives, Enabled = true };
+                var pHawaiiPickles = new DishIngredient { Dish = pHawaii, Ingredient = pickles, Enabled = true };
+                var pHawaiiPepperoni = new DishIngredient { Dish = pHawaii, Ingredient = pepperoni, Enabled = true };
                 pHawaii.DishIngredients = new List<DishIngredient>
                 {
                     pHawaiiCheese,
@@ -93,9 +93,9 @@ namespace InmemDb.Models
 
                 //Pasta
                 var pBolognese = new Dish { Name = "Spaghetti Bolognese", Price = 75, Category = pasta };
-                var pBologneseTomatoSauce = new DishIngredient { Dish = pBolognese, Ingredient = tomatoSauce };
-                var pBologneseHam = new DishIngredient { Dish = pBolognese, Ingredient = ham };
-                var pBologneseGarlic = new DishIngredient { Dish = pBolognese, Ingredient = garlic };
+                var pBologneseTomatoSauce = new DishIngredient { Dish = pBolognese, Ingredient = tomatoSauce, Enabled = true };
+                var pBologneseHam = new DishIngredient { Dish = pBolognese, Ingredient = ham, Enabled = true };
+                var pBologneseGarlic = new DishIngredient { Dish = pBolognese, Ingredient = garlic, Enabled = true };
                 pBolognese.DishIngredients = new List<DishIngredient>
                 {
                     pBologneseTomatoSauce,
@@ -105,9 +105,9 @@ namespace InmemDb.Models
 
                 //Salad
                 var sGreece = new Dish { Name = "Greece Salad", Price = 80, Category = salad };
-                var sGreeceOlives = new DishIngredient { Dish = sGreece, Ingredient = olives };
-                var sGreeceCheese = new DishIngredient { Dish = sGreece, Ingredient = cheese };
-                var sGreeceGarlic = new DishIngredient { Dish = sGreece, Ingredient = garlic };
+                var sGreeceOlives = new DishIngredient { Dish = sGreece, Ingredient = olives, Enabled = true };
+                var sGreeceCheese = new DishIngredient { Dish = sGreece, Ingredient = cheese, Enabled = true };
+                var sGreeceGarlic = new DishIngredient { Dish = sGreece, Ingredient = garlic, Enabled = true };
                 sGreece.DishIngredients = new List<DishIngredient>
                 {
                     sGreeceOlives,
