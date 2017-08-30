@@ -42,6 +42,8 @@ namespace InmemDb
             services.AddTransient<RoleManager<IdentityRole>>();
             services.AddTransient<IngredientService>();
 
+            services.AddSession();
+
             services.AddMvc();
         }
 
@@ -62,6 +64,8 @@ namespace InmemDb
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            app.UseSession();
 
             app.UseMvc(routes =>
             {
