@@ -9,28 +9,25 @@
 <div>
     <h4>Dish</h4>
     <hr />
-    <table>
-@foreach (var ingridient in Model.DishIngredients)
-{
-        <tr>
-            <td>@ingridient.Ingredient.Name</td>
-        </tr>
-}
-    </table>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-    </dl>
+
+        <table>
+            <thead class="col-lg-6">
+                <tr>
+                    <td>@Html.DisplayFor(model => model.Name)</td>
+                </tr>
+                <tr>
+                    <td>@Html.DisplayFor(model => model.Price) KR</td>
+                </tr>
+            </thead>
+            <tbody class="col-lg-6">
+                @foreach (var ingridient in Model.DishIngredients)
+                {
+                    <tr>
+                        <td>@ingridient.Ingredient.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.DishId">Edit</a> |

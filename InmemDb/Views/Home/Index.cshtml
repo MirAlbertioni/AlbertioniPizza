@@ -6,6 +6,9 @@
 }
 
 <h2>Index</h2>
+@*Column one
+    ----------PIZZA DISHES----------
+    Column one*@
 <div class="col-lg-3">
     <table class="table">
         <thead>
@@ -32,6 +35,9 @@
         </tbody>
     </table>
 </div>
+@*Column 2
+    ----------PASTA DISHES----------
+    Column 2*@
 <div class="col-lg-3">
     <table class="table">
         <thead>
@@ -51,13 +57,16 @@
                         <td>@Html.DisplayFor(modelItem => item.Name)</td>
                         <th style="font-size:10px;">@_ingredients.AllToStringForDishId(item.DishId)</th>
                         <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                        <td><input asp-action="Cart" type="button" value="Add" class="btn btn-primary" /></td>
+                        <td><input asp-controller="Order" asp-action="Cart" type="button" value="Add" class="btn btn-primary" /></td>
                     </tr>
                 }
             }
         </tbody>
     </table>
 </div>
+@*Column 3
+    ----------SALAD DISHES----------
+    Column 3*@
 <div class="col-lg-3">
     <table class="table">
         <thead>
@@ -84,4 +93,7 @@
         </tbody>
     </table>
 </div>
-<div class="col-lg-3" asp-action="Cart"></div>
+@*Column 4
+----------ORDERSUMMARY PARTIAL----------
+Column 4*@
+<div id="orderSummary" style="background-color: yellow; float: right; width:250px; margin-top: 40px;" class="col-lg-3"></div>

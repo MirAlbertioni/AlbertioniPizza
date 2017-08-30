@@ -40,5 +40,7 @@ namespace InmemDb.Data
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<DishIngredient> DishIngredients { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<Order> Order { get; set; }
+        public DbSet<DishOrder> DishOrder { get; set; }
     }
 }
