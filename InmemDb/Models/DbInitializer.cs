@@ -43,17 +43,17 @@ namespace InmemDb.Models
                 var cheese = new Ingredient { Name = "Cheese", Price = 5 };
                 var tomatoe = new Ingredient { Name = "Tomatoe", Price = 5 };
                 var tomatoSauce = new Ingredient { Name = "Tomato sauce", Price = 5 };
-                var ham = new Ingredient { Name = "Ham", Price = 5 };
-                var tuna = new Ingredient { Name = "Tuna", Price = 5 };
+                var ham = new Ingredient { Name = "Ham", Price = 7 };
+                var tuna = new Ingredient { Name = "Tuna", Price = 6 };
                 var olives = new Ingredient { Name = "Olives", Price = 5 };
                 var pepperoni = new Ingredient { Name = "Pepperoni", Price = 5 };
-                var kebab = new Ingredient { Name = "Kebab", Price = 5 };
-                var pickles = new Ingredient { Name = "Pickles", Price = 5 };
+                var kebab = new Ingredient { Name = "Kebab", Price = 7 };
+                var pickles = new Ingredient { Name = "Pickles", Price = 4 };
                 var broccoli = new Ingredient { Name = "Broccoli", Price = 5 };
-                var garlic = new Ingredient { Name = "Garlic", Price = 5 };
+                var garlic = new Ingredient { Name = "Garlic", Price = 4 };
                 var cuecumber = new Ingredient { Name = "Cuecumber", Price = 5 };
-                var onion = new Ingredient { Name = "Onion", Price = 5 };
-                var letuce = new Ingredient { Name = "Letuce", Price = 5 };
+                var onion = new Ingredient { Name = "Onion", Price = 3 };
+                var letuce = new Ingredient { Name = "Letuce", Price = 3 };
 
                 //Pizza
                 var pCappricciosa = new Dish { Name = "Cappricciosa", Price = 79, Category =  pizza};

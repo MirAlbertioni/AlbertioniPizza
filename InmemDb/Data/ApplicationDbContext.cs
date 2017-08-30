@@ -20,6 +20,9 @@ namespace InmemDb.Data
             builder.Entity<DishIngredient>()
                 .HasKey(di => new { di.DishId, di.IngredientId });
 
+            builder.Entity<DishOrder>()
+                .HasKey(di => new { di.DishId, di.OrderId });
+
             builder.Entity<DishIngredient>()
                 .HasOne(di => di.Ingredient)
                 .WithMany(d => d.DishIngredients)
