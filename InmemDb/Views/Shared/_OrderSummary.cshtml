@@ -1,30 +1,26 @@
 ﻿@model ICollection<InmemDb.Models.DishOrder>
 
 
-<table>
+
+<table class="table-striped">
     @foreach (var dish in Model)
     {
         <tr>
             <td>@dish.Dish.Name</td>
-        </tr>
-        <tr>
-            <td>
-                @dish.Quantity st
-                <br />
-                <br /><br />
-            </td>
+
+            <td>@dish.Quantity * @dish.Dish.Price = @(dish.Quantity * dish.Dish.Price) KR</td>
         </tr>
     }
+</table>
+<table>
     <tr>
-        <td>Summa</td>
+        <td>To Pay @Model.Sum(p => p.Dish.Price * p.Quantity) KR</td>
     </tr>
     <tr>
-        <td>
-            Att betala <b>@Model.Sum(p => p.Dish.Price* p.Quantity)</b> KR
-            <br />
-            <a asp-action="OrderDetails" asp-controller="Home">Köp >></a>
-        </td>
+        <td><a class="btn btn-primary" asp-action="ResetCart" asp-controller="ShoppingCart">Reset</a></td>
+        <td><a style="float:right;margin-bottom:auto;" class="btn btn-primary">Buy</a></td>
     </tr>
-
-
+    <tr></tr>
+    
+    
 </table>

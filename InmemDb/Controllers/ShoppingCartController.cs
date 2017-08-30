@@ -112,5 +112,12 @@ namespace InmemDb.Controllers
 
             return View(orderViewModel);
         }
+
+        public IActionResult ResetCart()
+        {
+            var session = HttpContext.Session;
+            session.Remove("Dish");
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
