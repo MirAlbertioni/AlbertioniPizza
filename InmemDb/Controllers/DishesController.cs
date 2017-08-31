@@ -101,7 +101,7 @@ namespace InmemDb.Controllers
                 return NotFound();
             }
 
-            var dish = await _context.Dishes.SingleOrDefaultAsync(m => m.DishId == id);
+            var dish = await _context.Dishes.Include(x => x.DishIngredients).SingleOrDefaultAsync(m => m.DishId == id);
             
             ViewData["categoryList"] = new SelectList(_context.Category, "CategoryId", "Name", dish.CategoryId);
 
@@ -119,27 +119,46 @@ namespace InmemDb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DishId,Name,Price,CategoryId")] Dish dish, IFormCollection form)
         {
-            if (id != dish.DishId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                var addIngredients = _ingredientService.All();
-
-                foreach (var ingredient in addIngredients)
+                try
                 {
-                    var dishIngredient = new DishIngredient
-                    {
-                        Ingredient = ingredient,
-                        Dish = dish,
-                        Enabled = form.Keys.Any(x => x == $"ingredient-{ingredient.IngredientId}")
-                    };
-                    _context.DishIngredients.Update(dishIngredient);
-                }
+                    var dishToEdit = _context.Dishes.Include(x => x.DishIngredients).FirstOrDefault(x => x.DishId == id);
 
-                await _context.SaveChangesAsync();
+                    foreach (var ingre in dishToEdit.DishIngredients)
+                    {
+                        _context.Remove(ingre);
+                    }
+                    _context.SaveChanges();
+
+                    foreach (var i in _ingredientService.All())
+                    {
+                        var dishIngredient = new DishIngredient()
+                        {
+                            Ingredient = i,
+                            Dish = dishToEdit,
+                            Enabled = form.Keys.Any(x => x == $"ingredient-{i.IngredientId}")
+
+                        };
+                        _context.DishIngredients.Add(dishIngredient);
+                    }
+                    dishToEdit.Name = dish.Name;
+                    dishToEdit.Price = dish.Price;
+
+                    //_context.Update(dish);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!DishExists(dish.DishId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(dish);
