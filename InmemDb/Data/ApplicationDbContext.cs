@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using InmemDb.Models;
+using InmemDb.Models.ManageViewModels;
 
 namespace InmemDb.Data
 {
@@ -45,5 +46,6 @@ namespace InmemDb.Data
         public DbSet<Category> Category { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<DishOrder> DishOrder { get; set; }
+        public DbSet<IndexViewModel> IndexViewModel { get; set; }
     }
 }

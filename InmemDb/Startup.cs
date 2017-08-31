@@ -42,6 +42,14 @@ namespace InmemDb
             services.AddTransient<RoleManager<IdentityRole>>();
             services.AddTransient<IngredientService>();
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+                });
+
             services.AddSession();
 
             services.AddMvc();
@@ -50,6 +58,8 @@ namespace InmemDb
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
         {
+            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

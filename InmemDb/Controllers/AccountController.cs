@@ -220,7 +220,17 @@ namespace InmemDb.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser
+                {
+                    Firstname = model.Firstname,
+                    Lastname = model.Lastname,
+                    Address = model.Address,
+                    Zip = model.Zip,
+                    City = model.City,
+                    PhoneNumber = model.Phone,
+                    UserName = model.Email,
+                    Email = model.Email,
+                };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

@@ -125,7 +125,13 @@ namespace InmemDb.Models
             var user = new ApplicationUser
             {
                 UserName = "student@test.com",
-                Email = "student@test.com"
+                Email = "student@test.com",
+                PhoneNumber = "1234567890",
+                Address = "AbbasStreet 21",
+                Zip = "12332",
+                City = "Stockholm",
+                Firstname = "Student",
+                Lastname = "test"
             };
             var userUserResult = userManager.CreateAsync(user, "Pa$$w0rd").Result;
             userManager.AddToRoleAsync(user, "User");

@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using InmemDb.Models;
 using InmemDb.Models.ManageViewModels;
 using InmemDb.Services;
+using InmemDb.Data;
 
 namespace InmemDb.Controllers
 {
@@ -20,6 +21,7 @@ namespace InmemDb.Controllers
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -33,13 +35,15 @@ namespace InmemDb.Controllers
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
-          UrlEncoder urlEncoder)
+          UrlEncoder urlEncoder,
+          ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             _urlEncoder = urlEncoder;
+            _context = context;
         }
 
         [TempData]
@@ -60,7 +64,13 @@ namespace InmemDb.Controllers
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 IsEmailConfirmed = user.EmailConfirmed,
-                StatusMessage = StatusMessage
+                StatusMessage = StatusMessage,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
+                Address = user.Address,
+                Zip = user.Zip,
+                City = user.City
+                
             };
 
             return View(model);
@@ -81,6 +91,8 @@ namespace InmemDb.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            
+
             var email = user.Email;
             if (model.Email != email)
             {
@@ -100,6 +112,15 @@ namespace InmemDb.Controllers
                     throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
                 }
             }
+            user.Firstname = model.Firstname;
+            user.Lastname = model.Lastname;
+            user.Address = model.Address;
+            user.Zip = model.Zip;
+            user.City = model.City;
+            user.PhoneNumber = model.PhoneNumber;
+
+            _context.IndexViewModel.Update(model);
+            _context.SaveChanges();
 
             StatusMessage = "Your profile has been updated";
             return RedirectToAction(nameof(Index));
