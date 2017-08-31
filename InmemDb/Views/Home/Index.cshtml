@@ -3,36 +3,28 @@
 
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+<link href="~/css/HomeIndexTable.css" rel="stylesheet" />
 
 @{
     ViewData["Title"] = "Index";
 }
-
+<h2>Index</h2>
 <form asp-controller="Dishes" asp-action="Index">
-
-
-    <h2>Index</h2>
     @*Column one
         ----------PIZZA DISHES----------
         Column one*@
-    <div class="col-lg-3">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th style="font-size:30px;background-color:green;color:white;">Pizza</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
+    <div class="col-lg-8">
+        <table class="">
+            <tr>
+                <td style="font-size:30px;background-color:green;color:white;">Pizza</td>
+            </tr>
                 @foreach (var item in Model)
             {
                     @if (item.Category.Name == "Pizza")
                     {
                         <tr>
                             <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                            <th style="font-size:10px;">@_ingredients.AllToStringForDishId(item.DishId)</th>
+                            <td style="font-size:10px;">@_ingredients.AllToStringForDishId(item.DishId)</td>
                             <td>@Html.DisplayFor(modelItem => item.Price)</td>
                             <td>
                                 <a class="btn btn-primary" 
@@ -47,33 +39,19 @@
                                 </a>
                             </td>
                         </tr>
-                        
                     }
                 }
-            </tbody>
-        </table>
-    </div>
-    @*Column 2
-        ----------PASTA DISHES----------
-        Column 2*@
-    <div class="col-lg-3">
-        <table class="table">
-            <thead>
                 <tr>
-                    <th style="font-size:30px;background-color:white;color:black;">Pasta</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <td style="font-size:30px;background-color:white;color:black;">Pasta</td>
+
                 </tr>
-            </thead>
-            <tbody>
                 @foreach (var item in Model)
             {
                     @if (item.Category.Name == "Pasta")
                 {
                         <tr>
                             <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                            <th style="font-size:10px;">@_ingredients.AllToStringForDishId(item.DishId)</th>
+                            <td style="font-size:10px;">@_ingredients.AllToStringForDishId(item.DishId)</td>
                             <td>@Html.DisplayFor(modelItem => item.Price)</td>
                             <td>
                                 <a class="btn btn-primary"
@@ -89,30 +67,16 @@
                             </td>                        </tr>
                     }
                 }
-            </tbody>
-        </table>
-    </div>
-    @*Column 3
-        ----------SALAD DISHES----------
-        Column 3*@
-    <div class="col-lg-3">
-        <table class="table">
-            <thead>
                 <tr>
-                    <th style="font-size:30px;background-color:red;color:white;">Salad</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <td style="font-size:30px;background-color:red;color:white;">Salad</td>
                 </tr>
-            </thead>
-            <tbody>
                 @foreach (var item in Model)
             {
                     @if (item.Category.Name == "Salad")
                 {
                         <tr>
                             <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                            <th style="font-size:10px;">@_ingredients.AllToStringForDishId(item.DishId)</th>
+                            <td style="font-size:10px;">@_ingredients.AllToStringForDishId(item.DishId)</td>
                             <td>@Html.DisplayFor(modelItem => item.Price)</td>
                             <td>
                                 <a class="btn btn-primary"
@@ -125,33 +89,28 @@
                                    data-ajax-update="#orderSummary">
                                     Add
                                 </a>
-                            </td>                        </tr>
+                            </td>                        
+                        </tr>
                     }
                 }
-            </tbody>
         </table>
     </div>
-    @*Column 4
-        ----------ORDERSUMMARY PARTIAL----------
-        Column 4*@
-    <div style="background-color: white;" class="col-lg-3">
+    <div class="col-lg-4">
         <table class="table">
             <thead>
                 <tr>
-                    <th style="font-size:30px;">Order</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>Order</th>
+                    <th>Quantity</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td id="orderSummary"></td>
-
                 </tr>
             </tbody>
-        </table>
-        
-    </div>
+                
 
+                
+        </table>
+    </div>
 </form>

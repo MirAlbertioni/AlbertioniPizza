@@ -21,8 +21,8 @@ namespace InmemDb.Data
             builder.Entity<DishIngredient>()
                 .HasKey(di => new { di.DishId, di.IngredientId });
 
-            builder.Entity<DishOrder>()
-                .HasKey(di => new { di.DishId, di.OrderId });
+            builder.Entity<DishCart>()
+                .HasKey(di => new { di.DishId, di.CartId });
 
             builder.Entity<DishIngredient>()
                 .HasOne(di => di.Ingredient)
@@ -44,8 +44,8 @@ namespace InmemDb.Data
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<DishIngredient> DishIngredients { get; set; }
         public DbSet<Category> Category { get; set; }
-        public DbSet<Order> Order { get; set; }
-        public DbSet<DishOrder> DishOrder { get; set; }
+        public DbSet<Cart> Order { get; set; }
+        public DbSet<DishCart> DishCart { get; set; }
         public DbSet<IndexViewModel> IndexViewModel { get; set; }
     }
 }

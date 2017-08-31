@@ -144,6 +144,7 @@ namespace InmemDb.Controllers
                     }
                     dishToEdit.Name = dish.Name;
                     dishToEdit.Price = dish.Price;
+                    dishToEdit.CategoryId = dish.CategoryId;
 
                     //_context.Update(dish);
                     await _context.SaveChangesAsync();

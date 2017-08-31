@@ -1,32 +1,29 @@
-﻿@model ICollection<InmemDb.Models.DishOrder>
+﻿@model ICollection<InmemDb.Models.DishCart>
 
 
-
-<table class="table-striped">
+<table>
     @foreach (var dish in Model)
     {
         <tr>
             <td>@dish.Dish.Name</td>
-
-            <td>@dish.Quantity * @dish.Dish.Price = @(dish.Quantity * dish.Dish.Price) KR</td>
+            <td>@dish.Quantity</td>
+            <td>@(dish.Quantity * dish.Dish.Price) KR</td>
         </tr>
     }
 </table>
 <table>
     <tr>
-        <td>To Pay @Model.Sum(p => p.Dish.Price * p.Quantity) KR</td>
+        <td><b>To Pay @Model.Sum(p => p.Dish.Price * p.Quantity) KR</b></td>
     </tr>
     <tr>
         <td><a class="btn btn-primary" asp-action="ResetCart" asp-controller="ShoppingCart">Reset</a></td>
-        @*@if (User.IsInRole("User")) {
-        <td><a class="btn btn-primary" asp-action="Payment" asp-controller="Order">Buy</a></td>
+        @if (User.IsInRole("User"))
+        {
+            <td><a class="btn btn-primary" asp-action="Payment" asp-controller="Order">Buy</a></td>
         }
         else
-        {*@
-            <td><a class="btn btn-primary" asp-action="LoginCreateOrGuest" asp-controller="Order">Buy</a></td>
-        @*}*@
+        {
+            <td><a class="btn btn-primary" asp-action="LoginCreateOrGuest" asp-controller="ShoppingCart">Buy</a></td>
+        }
     </tr>
-    <tr></tr>
-    
-    
 </table>
