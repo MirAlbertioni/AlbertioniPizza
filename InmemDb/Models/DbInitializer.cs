@@ -11,33 +11,15 @@ namespace InmemDb.Models
     {
         public static void Initializer(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            var aUser = new ApplicationUser
-            {
-                UserName = "student@test.com",
-                Email = "student@test.com"
-            };
-            var r = userManager.CreateAsync(aUser, "Pa$$w0rd").Result;
+            CreateUser(userManager, roleManager);
+            CreateAdmin(userManager, roleManager);
 
-            var adminRole = new IdentityRole { Name = "Admin" };
-            var roleResult = roleManager.CreateAsync(adminRole).Result;
-
-            var adminUser = new ApplicationUser
-            {
-                UserName = "admin@test.com",
-                Email = "admin@test.com"
-            };
-            var adminuserResult = userManager.CreateAsync(adminUser, "Pa$$w0rd").Result;
-
-            userManager.AddToRoleAsync(adminUser, "Admin");
-
-            
-
-            if(context.Dishes.ToList().Count == 0)
+            if (context.Dishes.ToList().Count == 0)
             {
                 var pizza = new Category { Name = "Pizza" };
                 var pasta = new Category { Name = "Pasta" };
                 var salad = new Category { Name = "Salad" };
-                
+
 
                 //Ingredients
                 var cheese = new Ingredient { Name = "Cheese", Price = 5 };
@@ -56,7 +38,7 @@ namespace InmemDb.Models
                 var letuce = new Ingredient { Name = "Letuce", Price = 3 };
 
                 //Pizza
-                var pCappricciosa = new Dish { Name = "Cappricciosa", Price = 79, Category =  pizza};
+                var pCappricciosa = new Dish { Name = "Cappricciosa", Price = 79, Category = pizza };
                 var pCappricciosaCheese = new DishIngredient { Dish = pCappricciosa, Ingredient = cheese, Enabled = true };
                 var pCappricciosaTomatoe = new DishIngredient { Dish = pCappricciosa, Ingredient = tomatoe, Enabled = true };
                 var pCappricciosaHam = new DishIngredient { Dish = pCappricciosa, Ingredient = ham, Enabled = true };
@@ -115,12 +97,38 @@ namespace InmemDb.Models
                     sGreeceGarlic
                 };
 
-                context.AddRange(cheese, tomatoe, tomatoSauce, ham, tuna, olives, pepperoni, kebab, 
+                context.AddRange(cheese, tomatoe, tomatoSauce, ham, tuna, olives, pepperoni, kebab,
                     pickles, broccoli, garlic, cuecumber, onion, letuce);
                 context.AddRange(pCappricciosa, pMargaritha, pHawaii, pBolognese, sGreece);
                 context.AddRange(pizza, pasta, salad);
                 context.SaveChanges();
             }
+        }
+
+        private static void CreateAdmin(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            var adminRole = new IdentityRole { Name = "Admin" };
+            var roleResult = roleManager.CreateAsync(adminRole).Result;
+            var adminUser = new ApplicationUser
+            {
+                UserName = "admin@test.com",
+                Email = "admin@test.com"
+            };
+            var adminuserResult = userManager.CreateAsync(adminUser, "Pa$$w0rd").Result;
+            userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+
+        private static void CreateUser(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            var userRole = new IdentityRole { Name = "User" };
+            var userResult = roleManager.CreateAsync(userRole).Result;
+            var user = new ApplicationUser
+            {
+                UserName = "student@test.com",
+                Email = "student@test.com"
+            };
+            var userUserResult = userManager.CreateAsync(user, "Pa$$w0rd").Result;
+            userManager.AddToRoleAsync(user, "User");
         }
     }
 }

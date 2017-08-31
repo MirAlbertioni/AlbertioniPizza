@@ -18,7 +18,13 @@
     </tr>
     <tr>
         <td><a class="btn btn-primary" asp-action="ResetCart" asp-controller="ShoppingCart">Reset</a></td>
-        <td><a style="float:right;margin-bottom:auto;" class="btn btn-primary">Buy</a></td>
+        @*@if (User.IsInRole("User")) {
+        <td><a class="btn btn-primary" asp-action="Payment" asp-controller="Order">Buy</a></td>
+        }
+        else
+        {*@
+            <td><a class="btn btn-primary" asp-action="LoginCreateOrGuest" asp-controller="Order">Buy</a></td>
+        @*}*@
     </tr>
     <tr></tr>
     
