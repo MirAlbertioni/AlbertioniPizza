@@ -32,7 +32,7 @@ namespace InmemDb.Controllers
 
             if (session.GetString("Dish") == null)
             {
-                order = new Cart { DishOrder = new List<DishCart>() };
+                order = new Cart { DishCart = new List<DishCart>() };
             }
             else
             {
@@ -47,19 +47,19 @@ namespace InmemDb.Controllers
                 DishId = selectedProd.DishId,
             };
 
-            if (order.DishOrder.Any(x => x.DishId == selectedProd.DishId))
+            if (order.DishCart.Any(x => x.DishId == selectedProd.DishId))
             {
-                order.DishOrder.First(c => c.DishId == selectedProd.DishId).Quantity++;
+                order.DishCart.First(c => c.DishId == selectedProd.DishId).Quantity++;
             }
             else
             {
-                order.DishOrder.Add(dishOrder);
+                order.DishCart.Add(dishOrder);
             }
 
             var serializedValue = JsonConvert.SerializeObject(order);
             session.SetString("Dish", serializedValue);
 
-            return PartialView("_OrderSummary", order.DishOrder);
+            return PartialView("_OrderSummary", order.DishCart);
         }
 
         public IActionResult ResetCart()
@@ -67,6 +67,11 @@ namespace InmemDb.Controllers
             var session = HttpContext.Session;
             session.Remove("Dish");
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult LoginCreateOrGuest()
+        {
+            return View();
         }
     }
 }

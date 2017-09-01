@@ -13,6 +13,6 @@ namespace InmemDb.Models
         public ApplicationUser User { get; set; }
 
         public virtual Dish Dish { get; set; }
-        public virtual Cart Order { get; set; }
+        public virtual Cart Cart { get; set; }
     }
 }

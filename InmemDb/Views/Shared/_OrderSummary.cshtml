@@ -1,7 +1,7 @@
 ﻿@model ICollection<InmemDb.Models.DishCart>
 
 
-<table>
+<table class="table">
     @foreach (var dish in Model)
     {
         <tr>
@@ -9,21 +9,22 @@
             <td>@dish.Quantity</td>
             <td>@(dish.Quantity * dish.Dish.Price) KR</td>
         </tr>
+
     }
 </table>
-<table>
+<table class="table">
     <tr>
         <td><b>To Pay @Model.Sum(p => p.Dish.Price * p.Quantity) KR</b></td>
     </tr>
     <tr>
         <td><a class="btn btn-primary" asp-action="ResetCart" asp-controller="ShoppingCart">Reset</a></td>
-        @if (User.IsInRole("User"))
+        @*@if (User.IsInRole("User"))
         {
             <td><a class="btn btn-primary" asp-action="Payment" asp-controller="Order">Buy</a></td>
         }
         else
-        {
-            <td><a class="btn btn-primary" asp-action="LoginCreateOrGuest" asp-controller="ShoppingCart">Buy</a></td>
-        }
+        {*@
+            <td><a class="btn btn-primary" asp-action="LoginCreateOrGuest" asp-controller="ShoppingCart">Checkout</a></td>
+        @*}*@
     </tr>
 </table>

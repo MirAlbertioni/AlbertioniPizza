@@ -36,27 +36,6 @@ namespace InmemDb.Controllers
             return View(await _context.Dishes.ToListAsync());
         }
 
-        // GET: Dishes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var dish = await _context.Dishes
-                .Include(d => d.DishIngredients)
-                .ThenInclude(di => di.Ingredient)
-                .SingleOrDefaultAsync(m => m.DishId == id);
-
-            if (dish == null)
-            {
-                return NotFound();
-            }
-
-            return View(dish);
-        }
-
         // GET: Dishes/Create
         public IActionResult Create(int? id, Dish dish)
         {
