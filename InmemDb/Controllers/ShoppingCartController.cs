@@ -8,6 +8,7 @@ using InmemDb.Data;
 using InmemDb.Models;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Session;
+using InmemDb.Services;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,18 +17,20 @@ namespace InmemDb.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IngredientService _ingredientService;
 
-        public ShoppingCartController(ApplicationDbContext context)
+        public ShoppingCartController(ApplicationDbContext context, IngredientService ingredientService)
         {
             _context = context;
+            _ingredientService = ingredientService;
         }
         // GET: /<controller>/
-        public IActionResult AddProduct(int id)
+        public IActionResult AddProduct(int id, IFormCollection form)
         {
             var session = HttpContext.Session;
 
             var selectedProd = _context.Dishes.SingleOrDefault(x => x.DishId == id);
-
+            
             Cart order;
 
             if (session.GetString("Dish") == null)
@@ -40,7 +43,7 @@ namespace InmemDb.Controllers
                 order = JsonConvert.DeserializeObject<Cart>(temp);
             }
 
-            DishCart dishOrder = new DishCart
+            DishCart dishCart = new DishCart
             {
                 Quantity = 1,
                 Dish = selectedProd,
@@ -53,7 +56,7 @@ namespace InmemDb.Controllers
             }
             else
             {
-                order.DishCart.Add(dishOrder);
+                order.DishCart.Add(dishCart);
             }
 
             var serializedValue = JsonConvert.SerializeObject(order);

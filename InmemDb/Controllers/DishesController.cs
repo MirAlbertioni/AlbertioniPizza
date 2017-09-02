@@ -125,7 +125,6 @@ namespace InmemDb.Controllers
                     dishToEdit.Price = dish.Price;
                     dishToEdit.CategoryId = dish.CategoryId;
 
-                    //_context.Update(dish);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

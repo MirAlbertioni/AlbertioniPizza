@@ -1,11 +1,13 @@
 ﻿@model ICollection<InmemDb.Models.DishCart>
-
+@inject InmemDb.Services.IngredientService ingredientService
 
 <table class="table">
     @foreach (var dish in Model)
     {
         <tr>
             <td>@dish.Dish.Name</td>
+<td>@ingredientService.AllToStringForDishId(dish.DishId)</td>
+            
             <td>@dish.Quantity</td>
             <td>@(dish.Quantity * dish.Dish.Price) KR</td>
         </tr>

@@ -13,5 +13,7 @@ namespace InmemDb.Models
         public Category Category { get; set; }
         public int CategoryId { get; set; }
         public List<DishIngredient> DishIngredients { get; set; }
+        public Ingredient Ingredient { get; set; }
+        public int IngredientId { get; set; }
     }
 }
