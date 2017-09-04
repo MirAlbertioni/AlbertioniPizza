@@ -10,7 +10,7 @@
     ViewData["Title"] = "Index";
 }
 <h2>Index</h2>
-<form asp-controller="Dishes" asp-action="Index">
+<form asp-controller="Home" asp-action="Index">
     @*Column one
         ----------PIZZA DISHES----------
         Column one*@
@@ -37,6 +37,18 @@
                                    data-ajax-method="update"
                                    data-ajax-update="#orderSummary">
                                     Add
+                                </a>
+                            </td>
+
+                            <td>
+                                <a class="btn btn-primary"
+                                   asp-controller="ShoppingCart"
+                                   asp-action="AddProduct"
+                                   asp-route-id=@item.DishId
+                                   data-ajax="true"
+                                   data-ajax-mode="get"
+                                   data-ajax-update="#extraIngredient">
+                                    Add extra ingredient
                                 </a>
                             </td>
                         </tr>
@@ -110,9 +122,21 @@
                     <td id="orderSummary"></td>
                 </tr>
             </tbody>
-                
-
-                
+        </table>
+    </div>
+@*-------------EXTRA INGREDIENT---------------*@
+    <div class="col-lg-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><span class="glyphicon glyphicon-shopping-cart"></span> Ingredients</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="extraIngredient"></td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </form>

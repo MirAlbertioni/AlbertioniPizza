@@ -9,6 +9,7 @@ using InmemDb.Data;
 using Microsoft.EntityFrameworkCore;
 using InmemDb.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace InmemDb.Controllers
 {
@@ -27,54 +28,57 @@ namespace InmemDb.Controllers
         public async Task<IActionResult> Index(int? id)
         {
             var catlist = _context.Category.ToList();
-            var dish = await _context.Dishes.Include(x => x.DishIngredients).SingleOrDefaultAsync(m => m.DishId == id);
 
             return View(await _context.Dishes.ToListAsync());
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Index(int id, [Bind("DishId,Name,Price,CategoryId")] Dish dish, IFormCollection form)
-        {
-            var dishToEdit = _context.Dishes.Include(x => x.DishIngredients).FirstOrDefault(x => x.DishId == id);
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            foreach (var ingre in dishToEdit.DishIngredients)
-            {
-                _context.Remove(ingre);
-            }
-            _context.SaveChanges();
+        //    var dish = await _context.Dishes.Include(x => x.DishIngredients).SingleOrDefaultAsync(m => m.DishId == id);
 
-            foreach (var i in _ingredientService.All())
-            {
-                var dishIngredient = new DishIngredient()
-                {
-                    Ingredient = i,
-                    Dish = dishToEdit,
-                    Enabled = form.Keys.Any(x => x == $"ingredient-{i.IngredientId}")
+        //    if (dish == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(dish);
+        //}
 
-                };
-                _context.DishIngredients.Add(dishIngredient);
-            }
-            dishToEdit.Name = dish.Name;
-            dishToEdit.Price = dish.Price;
-            dishToEdit.CategoryId = dish.CategoryId;
+        //[HttpPost]
+        //public IActionResult Edit(int id, [Bind("DishId,Name,Price,CategoryId")] Dish dish, IFormCollection form)
+        //{
+        //    var dishToEdit = _context.Dishes.Include(x => x.DishIngredients).FirstOrDefault(x => x.DishId == id);
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //    foreach (var ingre in dishToEdit.DishIngredients)
+        //    {
+        //        _context.Remove(ingre);
+        //    }
+        //    _context.SaveChanges();
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+        //    foreach (var i in _ingredientService.All())
+        //    {
+        //        var dishIngredient = new DishIngredient()
+        //        {
+        //            Ingredient = i,
+        //            Dish = dishToEdit,
+        //            Enabled = form.Keys.Any(x => x == $"ingredient-{i.IngredientId}")
 
-            return View();
-        }
+        //        };
+        //        _context.DishIngredients.Add(dishIngredient);
+        //    }
+        //    dishToEdit.Name = dish.Name;
+        //    dishToEdit.Price = dish.Price;
+        //    dishToEdit.CategoryId = dish.CategoryId;
+        //    dishToEdit.Ingredient = dish.Ingredient;
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+        //    _context.SaveChangesAsync();
 
-            return View();
-        }
+        //    return PartialView("_ExtraIngredient", dishToEdit);
+        //}
 
         public IActionResult Error()
         {
