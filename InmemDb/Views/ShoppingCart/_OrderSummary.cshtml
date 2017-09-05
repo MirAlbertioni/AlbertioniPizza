@@ -10,6 +10,16 @@
             
             <td>@dish.Quantity</td>
             <td>@(dish.Quantity * dish.Dish.Price) KR</td>
+            <td>
+                <a class="btn btn-primary"
+                   asp-controller="ShoppingCart"
+                   asp-action="AddProduct"
+                   asp-route-id=@dish.DishId
+                   data-ajax="true"
+                   data-ajax-update="#extraIngredient">
+                    Edit ingredients
+                </a>
+            </td>
         </tr>
 
     }

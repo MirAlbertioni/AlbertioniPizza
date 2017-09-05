@@ -43,9 +43,11 @@ namespace InmemDb.Data
         public DbSet<Dish> Dishes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<DishIngredient> DishIngredients { get; set; }
-        public DbSet<Category> Category { get; set; }
-        public DbSet<Cart> Order { get; set; }
-        public DbSet<DishCart> DishCart { get; set; }
-        public DbSet<IndexViewModel> IndexViewModel { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<CartItemIngredient> CartItemIngredients { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
     }
 }

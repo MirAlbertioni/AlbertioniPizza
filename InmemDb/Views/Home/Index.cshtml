@@ -2,9 +2,9 @@
 @inject InmemDb.Services.IngredientService _ingredientService
 
 
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
+@*<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
-<link href="~/css/HomeIndexTable.css" rel="stylesheet" />
+<link href="~/css/HomeIndexTable.css" rel="stylesheet" />*@
 
 @{
     ViewData["Title"] = "Index";
@@ -50,6 +50,31 @@
                                    data-ajax-update="#extraIngredient">
                                     Add extra ingredient
                                 </a>
+                                @*<a class="btn btn-success" data-toggle="modal" data-target=".bootstrapmodal">Edit ingredients</a>
+
+                                <div class="modal fade bootstrapmodal">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+                                                <div class="modal-title">my modal</div>
+                                            </div>
+                                            <div class="modal-body">
+                                                Body
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-primary"
+                                                        asp-controller="ShoppingCart"
+                                                        asp-action="AddProduct"
+                                                        asp-route-id=@item.DishId
+                                                        data-ajax="true"
+                                                        data-ajax-mode="get"
+                                                        data-ajax-update="#extraIngredient">Update</button>
+                                                <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
                             </td>
                         </tr>
                     }
@@ -119,7 +144,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td id="orderSummary"></td>
+                    @*<td id="orderSummary"></td>*@
+                    <td></td>
                 </tr>
             </tbody>
         </table>
