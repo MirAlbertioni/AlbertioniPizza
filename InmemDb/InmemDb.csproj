@@ -3,11 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <UserSecretsId>aspnet-InmemDb-0736318B-0A13-407C-962F-986B9B697173</UserSecretsId>
-    <Configurations>Debug;Release;IIS;LocalIIS</Configurations>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LocalIIS|AnyCPU'">
-    <WarningLevel>1</WarningLevel>
   </PropertyGroup>
 
 
