@@ -1,4 +1,4 @@
-﻿@model ICollection<InmemDb.Models.DishCart>
+﻿@model ICollection<InmemDb.Models.CartItem>
 @inject InmemDb.Services.IngredientService ingredientService
 
 <table class="table">
@@ -6,7 +6,7 @@
     {
         <tr>
             <td>@dish.Dish.Name</td>
-<td>@ingredientService.AllToStringForDishId(dish.DishId)</td>
+<td>@ingredientService.AllToStringForDishId(dish.Dish.DishId)</td>
             
             <td>@dish.Quantity</td>
             <td>@(dish.Quantity * dish.Dish.Price) KR</td>
@@ -14,7 +14,7 @@
                 <a class="btn btn-primary"
                    asp-controller="ShoppingCart"
                    asp-action="AddProduct"
-                   asp-route-id=@dish.DishId
+                   asp-route-id=@dish.Dish.DishId
                    data-ajax="true"
                    data-ajax-update="#extraIngredient">
                     Edit ingredients

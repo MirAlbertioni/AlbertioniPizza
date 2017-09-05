@@ -27,7 +27,7 @@ namespace InmemDb.Controllers
         // GET: Dishes
         public async Task<IActionResult> Index(int? id)
         {
-            var catlist = _context.Category.ToList();
+            var catlist = _context.Categories.ToList();
 
             return View(await _context.Dishes.ToListAsync());
         }

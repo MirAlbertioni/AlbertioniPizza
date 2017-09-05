@@ -21,9 +21,6 @@ namespace InmemDb.Data
             builder.Entity<DishIngredient>()
                 .HasKey(di => new { di.DishId, di.IngredientId });
 
-            builder.Entity<DishCart>()
-                .HasKey(di => new { di.DishId, di.CartId });
-
             builder.Entity<DishIngredient>()
                 .HasOne(di => di.Ingredient)
                 .WithMany(d => d.DishIngredients)
@@ -33,6 +30,16 @@ namespace InmemDb.Data
                 .HasOne(di => di.Dish)
                 .WithMany(d => d.DishIngredients)
                 .HasForeignKey(di => di.DishId);
+
+            builder.Entity<CartItemIngredient>()
+                .HasOne(di => di.CartItem)
+                .WithMany(d => d.CartItemIngredient)
+                .HasForeignKey(di => di.CartItemId);
+
+            builder.Entity<CartItemIngredient>()
+                .HasOne(di => di.Ingredient)
+                .WithMany(d => d.CartItemIngredient)
+                .HasForeignKey(di => di.IngredientId);
 
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
@@ -49,5 +56,6 @@ namespace InmemDb.Data
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<CartItemIngredient> CartItemIngredients { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<IndexViewModel> IndexViewModel { get; set; }
     }
 }

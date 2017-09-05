@@ -43,7 +43,7 @@ namespace InmemDb.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProduct(int id, [Bind("DishId,Name,Price,CategoryId")] Dish dish, IFormCollection form)
+        public IActionResult AddProduct(int id, IFormCollection form)
         {
             var selectedProd = _context.Dishes.Include(x => x.DishIngredients).FirstOrDefault(x => x.DishId == id);
 

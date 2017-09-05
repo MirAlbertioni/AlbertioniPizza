@@ -27,7 +27,7 @@ namespace InmemDb.Controllers
         // GET: Dishes
         public async Task<IActionResult> Index(int? id)
         {
-            var catlist = _context.Category.ToList();
+            var catlist = _context.Categories.ToList();
 
             var dish = _context.Dishes
                 .Include(d => d.DishIngredients)
@@ -39,7 +39,7 @@ namespace InmemDb.Controllers
         // GET: Dishes/Create
         public IActionResult Create(int? id, Dish dish)
         {
-            ViewData["categoryList"] = new SelectList(_context.Category, "CategoryId", "Name", dish.CategoryId);
+            ViewData["categoryList"] = new SelectList(_context.Categories, "CategoryId", "Name", dish.CategoryId);
 
             return View();
         }
@@ -82,7 +82,7 @@ namespace InmemDb.Controllers
 
             var dish = await _context.Dishes.Include(x => x.DishIngredients).SingleOrDefaultAsync(m => m.DishId == id);
             
-            ViewData["categoryList"] = new SelectList(_context.Category, "CategoryId", "Name", dish.CategoryId);
+            ViewData["categoryList"] = new SelectList(_context.Categories, "CategoryId", "Name", dish.CategoryId);
 
             if (dish == null)
             {
