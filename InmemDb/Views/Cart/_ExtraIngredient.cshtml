@@ -1,7 +1,7 @@
 ﻿@model InmemDb.Models.Dish
 @inject InmemDb.Services.IngredientService _ingredientService
 
-<form id="form" asp-action="AddProduct">
+<form asp-controller="ShoppingCart" asp-action="AddProduct">
     @foreach (var ingredient in _ingredientService.All())
     {
         if (Model.DishIngredients.Any(x => x.IngredientId == ingredient.IngredientId && x.Enabled))
@@ -22,8 +22,7 @@
         }
 
     }
-
-<span class="btn btn-primary" id="button">Add</span>
+    <span class="btn btn-primary" id="button">Add</span>
     <script>
         $(function () {
             $("#button").click(function () {
@@ -38,20 +37,6 @@
             });
         });
     </script>
-
-
-    @*<button class="btn btn-primary" id="button">Add</button>
-    <script>
-        $("#button").click(function () {
-            $.ajax({
-                type: "GET",
-                data: { id: @Model.DishId}, //if you need to post Model data, use this
-                url: "/ShoppingCart/_OrderSummary",
-                success: function (data) {
-                    alert(data)
-                    $("#orderSummary").html(data);
-                }
-            });
-        }
-    </script>*@
 </form>
+
+

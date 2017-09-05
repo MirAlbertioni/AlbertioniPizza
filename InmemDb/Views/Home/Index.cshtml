@@ -10,7 +10,7 @@
     ViewData["Title"] = "Index";
 }
 <h2>Index</h2>
-<form asp-controller="Home" asp-action="Index">
+
     @*Column one
         ----------PIZZA DISHES----------
         Column one*@
@@ -19,119 +19,96 @@
             <tr>
                 <td style="font-size:30px;background-color:green;color:white;">Pizza</td>
             </tr>
-                @foreach (var item in Model)
+            @foreach (var item in Model)
             {
-                    @if (item.Category.Name == "Pizza")
-                    {
-                        <tr>
-                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                            <td style="font-size:10px;">@_ingredientService.AllToStringForDishId(item.DishId)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                            <td>
-                                <a class="btn btn-primary" 
-                                   asp-controller="ShoppingCart"
-                                   asp-action="AddProduct"
-                                   asp-route-id=@item.DishId
-                                   data-ajax="true"
-                                   data-ajax-mode="get"
-                                   data-ajax-update="#orderSummary">
-                                    Add
-                                </a>
-                            </td>
-
-                            <td>
-                                <a class="btn btn-primary"
-                                   asp-controller="ShoppingCart"
-                                   asp-action="AddProduct"
-                                   asp-route-id=@item.DishId
-                                   data-ajax="true"
-                                   data-ajax-mode="get"
-                                   data-ajax-update="#extraIngredient">
-                                    Add extra ingredient
-                                </a>
-                                @*<a class="btn btn-success" data-toggle="modal" data-target=".bootstrapmodal">Edit ingredients</a>
-
-                                <div class="modal fade bootstrapmodal">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button class="close" data-dismiss="modal"><span>&times;</span></button>
-                                                <div class="modal-title">my modal</div>
-                                            </div>
-                                            <div class="modal-body">
-                                                Body
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button class="btn btn-primary"
-                                                        asp-controller="ShoppingCart"
-                                                        asp-action="AddProduct"
-                                                        asp-route-id=@item.DishId
-                                                        data-ajax="true"
-                                                        data-ajax-mode="get"
-                                                        data-ajax-update="#extraIngredient">Update</button>
-                                                <button class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>*@
-                            </td>
-                        </tr>
-                    }
-                }
-                <tr>
-                    <td style="font-size:30px;background-color:white;color:black;">Pasta</td>
-
-                </tr>
-                @foreach (var item in Model)
-            {
-                    @if (item.Category.Name == "Pasta")
+                @if (item.Category.Name == "Pizza")
                 {
-                        <tr>
-                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                            <td style="font-size:10px;">@_ingredientService.AllToStringForDishId(item.DishId)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                            <td>
-                                <a class="btn btn-primary"
-                                   asp-controller="ShoppingCart"
-                                   asp-action="AddProduct"
-                                   asp-route-id=@item.DishId
-                                   data-ajax="true"
-                                   data-ajax-mode="get"
-                                   data-ajax-method="update"
-                                   data-ajax-update="#orderSummary">
-                                    Add
-                                </a>
-                            </td>
-                        </tr>
-                    }
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td style="font-size:10px;">@_ingredientService.AllToStringForDishId(item.DishId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                        <td>
+                            <a class="btn btn-primary"
+                               asp-controller="Cart"
+                               asp-action="AddDish"
+                               asp-route-id=@item.DishId
+                               data-ajax="true"
+                               data-ajax-mode="get"
+                               data-ajax-method="update"
+                               data-ajax-update="#orderSummary">
+                                Add
+                            </a>
+                        </td>
+
+                        <td>
+                            <a class="btn btn-primary"
+                               asp-controller="Cart"
+                               asp-action="EditDish"
+                               asp-route-id=@item.DishId
+                               data-ajax="true"
+                               data-ajax-mode="get"
+                               data-ajax-update="#extraIngredient">
+                                Add extra ingredient
+                            </a>
+                        </td>
+                    </tr>
                 }
-                <tr>
-                    <td style="font-size:30px;background-color:red;color:white;">Salad</td>
-                </tr>
-                @foreach (var item in Model)
+            }
+            <tr>
+                <td style="font-size:30px;background-color:white;color:black;">Pasta</td>
+            </tr>
+            @foreach (var item in Model)
             {
-                    @if (item.Category.Name == "Salad")
+                @if (item.Category.Name == "Pasta")
                 {
-                        <tr>
-                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                            <td style="font-size:10px;">@_ingredientService
-                                .AllToStringForDishId(item.DishId)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                            <td>
-                                <a class="btn btn-primary"
-                                   asp-controller="ShoppingCart"
-                                   asp-action="AddProduct"
-                                   asp-route-id=@item.DishId
-                                   data-ajax="true"
-                                   data-ajax-mode="get"
-                                   data-ajax-method="update"
-                                   data-ajax-update="#orderSummary">
-                                    Add
-                                </a>
-                            </td>                        
-                        </tr>
-                    }
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td style="font-size:10px;">@_ingredientService.AllToStringForDishId(item.DishId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                        <td>
+                            <a class="btn btn-primary"
+                               asp-controller="ShoppingCart"
+                               asp-action="AddProduct"
+                               asp-route-id=@item.DishId
+                               data-ajax="true"
+                               data-ajax-mode="get"
+                               data-ajax-method="update"
+                               data-ajax-update="#orderSummary">
+                                Add
+                            </a>
+                        </td>
+                    </tr>
                 }
+            }
+            <tr>
+                <td style="font-size:30px;background-color:red;color:white;">Salad</td>
+            </tr>
+            @foreach (var item in Model)
+            {
+                @if (item.Category.Name == "Salad")
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td style="font-size:10px;">
+                            @_ingredientService
+                        .AllToStringForDishId(item.DishId)
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>
+                        <a class="btn btn-primary"
+                           asp-controller="ShoppingCart"
+                           asp-action="AddProduct"
+                           asp-route-id=@item.DishId
+                           data-ajax="true"
+                           data-ajax-mode="get"
+                           data-ajax-method="update"
+                           data-ajax-update="#orderSummary">
+                            Add
+                        </a>
+                    </td>
+                </tr>
+                }
+            }
         </table>
     </div>
     <div class="col-lg-4">
@@ -148,7 +125,7 @@
             </tbody>
         </table>
     </div>
-@*-------------EXTRA INGREDIENT---------------*@
+    @*-------------EXTRA INGREDIENT---------------*@
     <div class="col-lg-4">
         <table class="table">
             <thead>
@@ -163,4 +140,3 @@
             </tbody>
         </table>
     </div>
-</form>

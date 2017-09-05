@@ -22,20 +22,20 @@ namespace InmemDb.Models
 
 
                 //Ingredients
-                var cheese = new Ingredient { Name = "Cheese", IngredientPrice = 5 };
-                var tomatoe = new Ingredient { Name = "Tomatoe", IngredientPrice = 5 };
-                var tomatoSauce = new Ingredient { Name = "Tomato sauce", IngredientPrice = 5 };
-                var ham = new Ingredient { Name = "Ham", IngredientPrice = 7 };
-                var tuna = new Ingredient { Name = "Tuna", IngredientPrice = 6 };
-                var olives = new Ingredient { Name = "Olives", IngredientPrice = 5 };
-                var pepperoni = new Ingredient { Name = "Pepperoni", IngredientPrice = 5 };
-                var kebab = new Ingredient { Name = "Kebab", IngredientPrice = 7 };
-                var pickles = new Ingredient { Name = "Pickles", IngredientPrice = 4 };
-                var broccoli = new Ingredient { Name = "Broccoli", IngredientPrice = 5 };
-                var garlic = new Ingredient { Name = "Garlic", IngredientPrice = 4 };
-                var cuecumber = new Ingredient { Name = "Cuecumber", IngredientPrice = 5 };
-                var onion = new Ingredient { Name = "Onion", IngredientPrice = 3 };
-                var letuce = new Ingredient { Name = "Letuce", IngredientPrice = 3 };
+                var cheese = new Ingredient { Name = "Cheese", Price = 5 };
+                var tomatoe = new Ingredient { Name = "Tomatoe", Price = 5 };
+                var tomatoSauce = new Ingredient { Name = "Tomato sauce", Price = 5 };
+                var ham = new Ingredient { Name = "Ham", Price = 7 };
+                var tuna = new Ingredient { Name = "Tuna", Price = 6 };
+                var olives = new Ingredient { Name = "Olives", Price = 5 };
+                var pepperoni = new Ingredient { Name = "Pepperoni", Price = 5 };
+                var kebab = new Ingredient { Name = "Kebab", Price = 7 };
+                var pickles = new Ingredient { Name = "Pickles", Price = 4 };
+                var broccoli = new Ingredient { Name = "Broccoli", Price = 5 };
+                var garlic = new Ingredient { Name = "Garlic", Price = 4 };
+                var cuecumber = new Ingredient { Name = "Cuecumber", Price = 5 };
+                var onion = new Ingredient { Name = "Onion", Price = 3 };
+                var letuce = new Ingredient { Name = "Letuce", Price = 3 };
 
                 //Pizza
                 var pCappricciosa = new Dish { Name = "Cappricciosa", Price = 79, Category = pizza };
