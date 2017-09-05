@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using InmemDb.Data;
 using InmemDb.Models;
 using Microsoft.AspNetCore.Http;
-using System.Diagnostics;
 using InmemDb.Services;
 
 namespace InmemDb.Controllers

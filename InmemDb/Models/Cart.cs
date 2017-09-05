@@ -7,6 +7,7 @@ namespace InmemDb.Models
         public int CartId { get; set; }
         public string UserId { get; set; }
 
-        public List<DishCart> DishCart { get; set; }
+        public virtual ICollection<DishCart> DishCart { get; set; }
+        public virtual ApplicationUser User { get; set; }
     }
 }

@@ -1,13 +1,11 @@
 ﻿@model InmemDb.Models.Dish
 @inject InmemDb.Services.IngredientService _ingredientService
-
 <form asp-controller="ShoppingCart" asp-action="AddProduct">
     @foreach (var ingredient in _ingredientService.All())
     {
         if (Model.DishIngredients.Any(x => x.IngredientId == ingredient.IngredientId && x.Enabled))
         {
             <div class="col-lg-6">
-
                 <input type="checkbox" value="ingredient-@ingredient.IngredientId" name="ingredient-@ingredient.IngredientId" checked />
                 <span>@ingredient.Name</span>
             </div>
@@ -15,28 +13,33 @@
         else
         {
             <div class="col-lg-6">
-
                 <input type="checkbox" value="ingredient-@ingredient.IngredientId" name="ingredient-@ingredient.IngredientId" />
                 <span>@ingredient.Name</span>
             </div>
         }
 
     }
-    <span class="btn btn-primary" id="button">Add</span>
+    <button class="btn btn-primary" id="button">Add</button>
     <script>
-        $(function () {
-            $("#button").click(function () {
-                $.ajax({
-                    url: "/ShoppingCart/AddProduct/" + @Model.DishId,
-                    type: "POST",
-                    data: $("form").serialize(), //if you need to post Model data, use this
-                    success: function (result) {
-                        $("#orderSummary").html(result);
-                    }
-                });
+        $("#button").click(function () {
+            $.ajax({
+                url: "ShoppingCart/AddProduct",
+                type: "get",
+                data: $("form").serialize(), //if you need to post Model data, use this
+                success: function (result) {
+                    $("#orderSummary").html(result);
+                }
             });
-        });
+        }
     </script>
+    @*<a class="btn btn-primary"
+           asp-controller="ShoppingCart"
+           asp-action="AddIngredient"
+           asp-route-id=@Model.DishId
+           data-ajax="true"
+           data-ajax-mode="post"
+           data-ajax-method="update"
+           data-ajax-update="#orderSummary">
+            Add
+        </a>*@
 </form>
-
-
