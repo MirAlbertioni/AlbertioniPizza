@@ -96,16 +96,16 @@ namespace InmemDb.Controllers
 
             var selectedProd = _context.Dishes.SingleOrDefault(x => x.DishId == id);
 
-            Cart order;
+            Cart cart;
 
             if (session.GetString("Dish") == null)
             {
-                order = new Cart { DishCart = new List<DishCart>() };
+                cart = new Cart { DishCart = new List<DishCart>() };
             }
             else
             {
                 var temp = session.GetString("Dish");
-                order = JsonConvert.DeserializeObject<Cart>(temp);
+                cart = JsonConvert.DeserializeObject<Cart>(temp);
             }
 
             DishCart dishCart = new DishCart
@@ -122,13 +122,13 @@ namespace InmemDb.Controllers
             //}
             //else
             //{
-            order.DishCart.Add(dishCart);
+            cart.DishCart.Add(dishCart);
             //}
 
-            var serializedValue = JsonConvert.SerializeObject(order);
+            var serializedValue = JsonConvert.SerializeObject(cart);
             session.SetString("Dish", serializedValue);
 
-            return PartialView("_OrderSummary", order.DishCart);
+            return PartialView("_OrderSummary", cart.DishCart);
         }
 
         public IActionResult ResetCart()

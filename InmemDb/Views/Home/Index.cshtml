@@ -8,7 +8,7 @@
     ViewData["Title"] = "Index";
 }
 <h2>Index</h2>
-<form>
+
     @*Column one
         ----------PIZZA DISHES----------
         Column one*@
@@ -31,10 +31,10 @@
                                asp-action="AddDishToCart"
                                asp-route-id=@item.DishId
                                data-ajax="true"
-                               data-ajax-mode="get"
-                               data-ajax-method="update"
-                               data-ajax-update="#orderSummary">
-                                Add
+                               data-ajax-method="GET"
+                               data-ajax-mode="replace"
+                               data-ajax-update="#orderSummary"
+                               onclick="Materialize.toast('@item.Name  added to cart', 4000)"><i class="Medium material-icons">add_shopping_cart</i>
                             </a>
                         </td>
                         @*<td>
@@ -108,33 +108,9 @@
             }
         </table>
     </div>
-    <div class="col-lg-4">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th><span class="glyphicon glyphicon-shopping-cart"></span> Shopping Cart</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td id="orderSummary"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    @*-------------EXTRA INGREDIENT---------------*@
-    <div class="col-lg-4">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th><span class="glyphicon glyphicon-shopping-cart"></span> Ingredients</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td id="extraIngredient"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</form>
+
+<ul id="slide-out" class="side-nav">
+    <li>
+        <div id="orderSummary"></div>
+    </li>
+</ul>

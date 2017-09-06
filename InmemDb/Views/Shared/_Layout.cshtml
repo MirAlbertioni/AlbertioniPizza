@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
@@ -40,6 +42,7 @@
                     <li><a asp-area="" asp-controller="Dishes" asp-action="Index">Dishes</a></li>
                     <li><a asp-area="" asp-controller="Categories" asp-action="Index">Categories</a></li>
                     <li><a asp-area="" asp-controller="Ingredients" asp-action="Index">Ingredients</a></li>
+                    <li><button id="ShowCart" style="float: none; height: 35px;" href="#" data-activates="slide-out" class="btn button-collapse">Show cart </button></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -73,6 +76,42 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+    <script>
+        $('.carousel.carousel-slider').carousel({ fullWidth: true });
+        $(".button-collapse").sideNav({
+            menuWidth: 350
+        });
+        $('.modal').modal();
+
+        $(function () {
+            $("#ShowCart").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "Home/Index",
+                    success: function (data) {
+                        $('#orderSummary').html(data);
+                    },
+                    error: function () {
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(function () {
+            $("#ShowCart").click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "Home/Index",
+                    success: function (data) {
+                        $('#orderSummary').html(data);
+                    },
+                    error: function () {
+                    }
+                });
+            });
+        });
+    </script>
 
     @RenderSection("Scripts", required: false)
 </body>
