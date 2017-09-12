@@ -7,6 +7,8 @@ using InmemDb.Data;
 using InmemDb.Models;
 using Microsoft.AspNetCore.Http;
 using InmemDb.Services;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace InmemDb.Controllers
 {
@@ -22,15 +24,54 @@ namespace InmemDb.Controllers
         }
 
         // GET: Dishes
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index(int id)
         {
-            var catlist = _context.Category.ToList();
+            var catlist = await _context.Category.ToListAsync();
 
+            var dishes = await _context.Dishes
+                .Include(x => x.DishIngredients)
+                .ToListAsync();
+
+            return View("Index", dishes);
+        }
+
+        public IActionResult EditIngredientsInCart(int? id)
+        {
             var dish = _context.Dishes
-                .Include(d => d.DishIngredients)
-                .ThenInclude(di => di.Ingredient);
+                            .Include(x => x.DishIngredients)
+                            .SingleOrDefault(x => x.DishId == id);
 
-            return View(await _context.Dishes.ToListAsync());
+            return View(dish);
+        }
+
+        [HttpPost]
+        public IActionResult EditIngredientsInCart(int id, [Bind("DishId,Name,Price,CategoryId")] IFormCollection form, Dish dish)
+        {
+            var dishToEdit = _context.DishCart.Include(x => x.Dish).ThenInclude(x => x.DishIngredients).FirstOrDefault(x => x.DishId == id);
+
+            foreach (var ingre in dishToEdit.Dish.DishIngredients)
+            {
+                _context.Remove(ingre);
+            }
+            _context.SaveChanges();
+            //efter första loopen raderas dishen
+            foreach (var i in _ingredientService.All())
+            {
+                var dishCart = new DishCart()
+                {
+                    DishIngredients = i.DishIngredients,
+                    Dish = dishToEdit.Dish,
+                    Enabled = form.Keys.Any(x => x == $"ingredient-{i.IngredientId}")
+                };
+                _context.DishCart.Add(dishCart);
+            }
+            dishToEdit.Dish.Name = dish.Name;
+            dishToEdit.Dish.Price = dish.Price;
+            
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Cart", "ShoppingCart");
         }
 
         // GET: Dishes/Create
@@ -121,6 +162,7 @@ namespace InmemDb.Controllers
                     dishToEdit.Name = dish.Name;
                     dishToEdit.Price = dish.Price;
                     dishToEdit.CategoryId = dish.CategoryId;
+                    dishToEdit.Ingredient = dish.Ingredient;
 
                     await _context.SaveChangesAsync();
                 }

@@ -7,13 +7,14 @@ namespace InmemDb.Models
 {
     public class DishCart
     {
+        public int Id { get; set; }
         public int DishId { get; set; }
         public int CartId { get; set; }
         public int Quantity { get; set; }
         public ApplicationUser User { get; set; }
+        public Dish Dish { get; set; }
+        public bool Enabled { get; set; }
 
-        public virtual Dish Dish { get; set; }
-        public virtual Ingredient Ingredient { get; set; }
-        public virtual Cart Cart { get; set; }
+        public List<DishIngredient> DishIngredients { get; set; }
     }
 }

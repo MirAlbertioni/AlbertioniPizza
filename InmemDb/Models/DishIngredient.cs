@@ -11,8 +11,6 @@ namespace InmemDb.Models
         public Dish Dish { get; set; }
         public int IngredientId { get; set; }
         public Ingredient Ingredient { get; set; }
-        public List<Ingredient> IngredientList { get; set; }
-        public List<Dish> DishList { get; set; }
         public bool Enabled { get; set; }
     }
 }

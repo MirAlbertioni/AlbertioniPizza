@@ -1,0 +1,37 @@
+﻿@*@model List<InmemDb.Models.DishCart>
+@inject InmemDb.Services.IngredientService _ingredientService
+
+<div style="width:400px;" class="modal fade" id="bootstrapmodals">
+    <div class="modal-content">
+        <div class="modal-header">
+
+            @foreach (var item in Model)
+            {
+                @foreach (var ingredient in _ingredientService.All())
+                {
+                    if (item.DishIngredients.Any(x => x.IngredientId == ingredient.IngredientId && x.Enabled))
+                    {
+                        <div class="col-lg-6">
+
+                            <input type="checkbox" value="@ingredient.IngredientId" name="ingredient-@ingredient.IngredientId" checked />
+                            <span>@ingredient.Name</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-lg-6">
+
+                            <input type="checkbox" value="@ingredient.IngredientId" name="ingredient-@ingredient.IngredientId" />
+                            <span>@ingredient.Name</span>
+                        </div>
+                    }
+
+                }
+            }
+        </div>
+        <div class="modal-body">
+            bodyasdasdasd
+        </div>
+    </div>
+    <div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div>*@

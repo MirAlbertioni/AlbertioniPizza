@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using InmemDb.Data;
 using InmemDb.Models;
 using InmemDb.Services;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace InmemDb
 {
@@ -41,6 +43,8 @@ namespace InmemDb
             services.AddTransient<UserManager<ApplicationUser>>();
             services.AddTransient<RoleManager<IdentityRole>>();
             services.AddTransient<IngredientService>();
+            services.AddTransient<CartService>();
+
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -52,7 +56,10 @@ namespace InmemDb
 
             services.AddSession();
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,7 +88,7 @@ namespace InmemDb
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Dishes}/{action=Index}/{id?}");
             });
             DbInitializer.Initializer(context, userManager, roleManager);
         }

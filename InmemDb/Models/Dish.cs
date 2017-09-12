@@ -15,5 +15,6 @@ namespace InmemDb.Models
         public List<DishIngredient> DishIngredients { get; set; }
         public Ingredient Ingredient { get; set; }
         public int IngredientId { get; set; }
+        public DishCart DishCart { get; set; }
     }
 }

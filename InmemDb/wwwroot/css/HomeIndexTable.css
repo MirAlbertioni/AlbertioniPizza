@@ -100,3 +100,8 @@ tbody:hover > tr:hover td {
     filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
     opacity: 1;
 }
+
+side-nav{
+    width:350px;
+    background-color:ghostwhite;
+}

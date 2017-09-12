@@ -26,71 +26,21 @@ namespace InmemDb.Controllers
             _ingredientService = ingredientService;
         }
 
-        //[HttpPost]
-        //public IActionResult AddProducts(int id, [Bind("DishId,Name,Price,CategoryId")] Dish dish, IFormCollection form)
-        //{
-        //    var selectedProd = _context.Dishes.Include(x => x.DishIngredients).FirstOrDefault(x => x.DishId == id);
+        // GET: Dishes
+        public ActionResult Index()
+        {
+            return View();
+        }
 
-        //    foreach (var ingre in selectedProd.DishIngredients)
-        //    {
-        //        _context.Remove(ingre);
-        //    }
-        //    _context.SaveChanges();
+        public IActionResult Cart()
+        {
+            var dishes = _context.DishCart
+                .Include(x => x.Dish)
+                .ThenInclude(i => i.DishIngredients).ToList();
+            return View(dishes);
+        }
 
-        //    foreach (var i in _ingredientService.All())
-        //    {
-        //        var dishIngredient = new DishIngredient()
-        //        {
-        //            Ingredient = i,
-        //            Dish = selectedProd,
-        //            Enabled = form.Keys.Any(x => x == $"ingredient-{i.IngredientId}")
-
-        //        };
-        //        _context.DishIngredients.Add(dishIngredient);
-        //    }
-
-        //    _context.SaveChangesAsync();
-
-        //    var session = HttpContext.Session;
-
-        //    Cart order;
-
-        //    if (session.GetString("Dish") == null)
-        //    {
-        //        order = new Cart { DishCart = new List<DishCart>() };
-        //    }
-        //    else
-        //    {
-        //        var temp = session.GetString("Dish");
-        //        order = JsonConvert.DeserializeObject<Cart>(temp);
-        //    }
-
-        //    DishCart dishCart = new DishCart
-        //    {
-        //        Quantity = 1,
-        //        Dish = selectedProd,
-        //        DishId = selectedProd.DishId
-        //    };
-
-        //    //if (order.DishCart.Any(x => x.DishId == selectedProd.DishId))
-        //    //{
-        //    //    order.DishCart.First(c => c.DishId == selectedProd.DishId).Quantity++;
-        //    //}
-        //    //else
-        //    //{
-        //    order.DishCart.Add(dishCart);
-        //    //}
-
-
-
-        //    var serializedValue = JsonConvert.SerializeObject(order, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
-        //    session.SetString("Dish", serializedValue);
-
-        //    return PartialView("_OrderSummary", order.DishCart);
-        //}
-
-
-        public IActionResult AddDishToCart(int id, IFormCollection form)
+        public IActionResult AddDishToCart(int id)
         {
             var session = HttpContext.Session;
 
@@ -98,13 +48,15 @@ namespace InmemDb.Controllers
 
             Cart cart;
 
-            if (session.GetString("Dish") == null)
+            if (session.GetString("Cart") == null)
             {
                 cart = new Cart { DishCart = new List<DishCart>() };
+                _context.Cart.Add(cart);
+                _context.SaveChanges();
             }
             else
             {
-                var temp = session.GetString("Dish");
+                var temp = session.GetString("Cart");
                 cart = JsonConvert.DeserializeObject<Cart>(temp);
             }
 
@@ -113,29 +65,23 @@ namespace InmemDb.Controllers
                 Quantity = 1,
                 Dish = selectedProd,
                 DishId = selectedProd.DishId,
-                Ingredient = selectedProd.Ingredient
+                DishIngredients = new List<DishIngredient>(),
             };
 
-            //if (order.DishCart.Any(x => x.DishId == selectedProd.DishId))
-            //{
-            //    order.DishCart.First(c => c.DishId == selectedProd.DishId).Quantity++;
-            //}
-            //else
-            //{
             cart.DishCart.Add(dishCart);
-            //}
+            _context.DishCart.Add(dishCart);
+            _context.SaveChanges();
+            var serializedValue = JsonConvert.SerializeObject(cart.CartId);
+            session.SetString("Cart", serializedValue);
 
-            var serializedValue = JsonConvert.SerializeObject(cart);
-            session.SetString("Dish", serializedValue);
-
-            return PartialView("_OrderSummary", cart.DishCart);
+            return RedirectToAction("Index", "Dishes", cart.DishCart);
         }
 
         public IActionResult ResetCart()
         {
             var session = HttpContext.Session;
-            session.Remove("Dish");
-            return RedirectToAction("Index", "Home");
+            session.Remove("Cart");
+            return RedirectToAction("Index", "Dishes");
         }
 
         public IActionResult LoginCreateOrGuest()
