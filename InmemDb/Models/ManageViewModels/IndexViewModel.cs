@@ -9,7 +9,7 @@ namespace InmemDb.Models.ManageViewModels
 {
     public class IndexViewModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Username { get; set; }
 
         public bool IsEmailConfirmed { get; set; }

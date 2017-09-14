@@ -18,12 +18,10 @@ namespace InmemDb.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IngredientService _ingredientService;
 
-        public ShoppingCartController(ApplicationDbContext context, IngredientService ingredientService)
+        public ShoppingCartController(ApplicationDbContext context)
         {
             _context = context;
-            _ingredientService = ingredientService;
         }
 
         // GET: Dishes
@@ -32,61 +30,205 @@ namespace InmemDb.Controllers
             return View();
         }
 
-        public IActionResult Cart()
+        public ActionResult Cart()
         {
-            var dishes = _context.DishCart
-                .Include(x => x.Dish)
-                .ThenInclude(i => i.DishIngredients).ToList();
-            return View(dishes);
-        }
-
-        public IActionResult AddDishToCart(int id)
-        {
-            var session = HttpContext.Session;
-
-            var selectedProd = _context.Dishes.SingleOrDefault(x => x.DishId == id);
-
             Cart cart;
+            List<CartItem> cartItems;
 
-            if (session.GetString("Cart") == null)
+            if (HttpContext.Session.GetInt32("Cart") == null)
             {
-                cart = new Cart { DishCart = new List<DishCart>() };
-                _context.Cart.Add(cart);
-                _context.SaveChanges();
+                cartItems = new List<CartItem>();
             }
             else
             {
-                var temp = session.GetString("Cart");
-                cart = JsonConvert.DeserializeObject<Cart>(temp);
+                var cartId = (int)HttpContext.Session.GetInt32("Cart");
+
+                cart = _context.Carts
+                    .Include(i => i.CartItem)
+                    .ThenInclude(x => x.CartItemIngredient)
+                    .ThenInclude(ig => ig.Ingredient)
+                    .Include(i => i.CartItem)
+                    .ThenInclude(ci => ci.Dish)
+                    .SingleOrDefault(x => x.CartId == cartId);
+
+                cartItems = cart.CartItem;
             }
 
-            DishCart dishCart = new DishCart
+            return View("Cart", cartItems);
+        }
+
+        public IActionResult AddDishToCart(int dishId)
+        {
+            int cartId;
+            var dish = _context.Dishes.Include(x => x.DishIngredients)
+                    .ThenInclude(i => i.Ingredient)
+                    .SingleOrDefault(d => d.DishId == dishId);
+
+            CartItem cartItem = new CartItem();
+            List<CartItemIngredient> cartItemIngredient = new List<CartItemIngredient>();
+
+            if (HttpContext.Session.GetInt32("Cart") == null)
             {
-                Quantity = 1,
-                Dish = selectedProd,
-                DishId = selectedProd.DishId,
-                DishIngredients = new List<DishIngredient>(),
-            };
+                foreach (var item in dish.DishIngredients)
+                {
+                    var newCartItemIngredient = new CartItemIngredient
+                    {
+                        CartItem = cartItem,
+                        Ingredient = item.Ingredient,
+                        IngredientId = item.IngredientId,
+                        CartItemIngredientPrice = item.Ingredient.Price
+                    };
 
-            cart.DishCart.Add(dishCart);
-            _context.DishCart.Add(dishCart);
-            _context.SaveChanges();
-            var serializedValue = JsonConvert.SerializeObject(cart.CartId);
-            session.SetString("Cart", serializedValue);
+                    cartItemIngredient.Add(newCartItemIngredient);
+                }
 
-            return RedirectToAction("Index", "Dishes", cart.DishCart);
+                List<CartItem> listOfCartItems = new List<CartItem>
+                {
+                    cartItem
+                };
+
+                Cart newCart = new Cart();
+                cartItem.Dish = dish;
+                cartItem.CartId = newCart.CartId;
+                cartItem.CartItemIngredient = cartItemIngredient;
+                cartItem.Quantity = 1;
+
+                newCart.CartItem = listOfCartItems;
+
+                _context.Carts.Add(newCart);
+                _context.SaveChanges();
+
+                cartId = newCart.CartId;
+                HttpContext.Session.SetInt32("Cart", cartId);
+
+                return RedirectToAction("Index", "Dish", newCart.CartItem);
+            }
+            else
+            {
+                cartId = (int)HttpContext.Session.GetInt32("Cart");
+
+                var currentCart = _context.Carts.Include(i => i.CartItem)
+                    .ThenInclude(d => d.Dish)
+                    .SingleOrDefault(x => x.CartId == cartId);
+
+
+                foreach (var item in dish.DishIngredients)
+                {
+                    var newCartItemIngredient = new CartItemIngredient
+                    {
+                        CartItem = cartItem,
+                        Ingredient = item.Ingredient,
+                        IngredientId = item.IngredientId,
+                        CartItemIngredientPrice = item.Ingredient.Price
+                    };
+                    cartItemIngredient.Add(newCartItemIngredient);
+                }
+                var newDish = new CartItem
+                {
+                    CartId = currentCart.CartId,
+                    Dish = dish,
+                    Quantity = 1,
+                    CartItemIngredient = cartItemIngredient
+                };
+
+                _context.CartItems.Add(newDish);
+                _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Dish", currentCart.CartItem);
+            }
+        }
+
+        public IActionResult EditDishIngredientsInCart(int cartItemId, int dishId, int ingredientId)
+        {
+            var cartId = HttpContext.Session.GetInt32("Cart");
+            var newDishVM = new DishIngredientVM();
+
+            var ingredients = _context.Ingredients.ToList();
+
+            var cartItem = _context.CartItems
+                .Include(x => x.Dish)
+                .Include(i => i.CartItemIngredient)
+                .SingleOrDefault(x => x.CartId == cartId && x.Dish.DishId == dishId && x.CartItemId == cartItemId);
+
+            var selectedIngredients = new List<SelectedIngredients>();
+
+            foreach (var item in ingredients)
+            {
+                var selected = new SelectedIngredients
+                {
+                    Name = item.Name,
+                    Id = item.IngredientId,
+                    Price = item.Price
+                };
+
+                if (cartItem.CartItemIngredient.Any(x => x.Ingredient.IngredientId == item.IngredientId))
+                {
+                    selected.Enabled = true;
+                }
+                if (_context.DishIngredients.Any(di => di.DishId == dishId && di.IngredientId == ingredientId))
+                    selected.Price = 0;
+                selectedIngredients.Add(selected);
+            }
+
+
+            newDishVM.Dish = cartItem.Dish;
+            newDishVM.SelectedIngredients = selectedIngredients;
+            newDishVM.DishId = cartItem.Dish.DishId;
+            newDishVM.CartItemId = cartItem.CartItemId;
+
+            return View("EditDishIngredientsInCart", newDishVM);
+        }
+
+        [HttpPost]
+        public IActionResult EditDishIngredientsInCart(DishIngredientVM dishIngredientVM)
+        {
+
+            var cartId = HttpContext.Session.GetInt32("Cart");
+
+            var cartItem = _context.CartItems
+                .Include(x => x.Dish)
+                .Include(i => i.CartItemIngredient)
+                .ThenInclude(s => s.Ingredient)
+                .SingleOrDefault(x => x.CartId == cartId && x.Dish.DishId == dishIngredientVM.DishId && x.CartItemId == dishIngredientVM.CartItemId);
+
+            var existingIngredients = cartItem.CartItemIngredient.Select(x => x.IngredientId).ToList();
+
+            var SelectedIds = dishIngredientVM.SelectedIngredients.Where(x => x.Enabled == true).Select(s => s.Id).ToList();
+
+            var unCheckedIds = dishIngredientVM.SelectedIngredients.Where(x => x.Enabled == false).Select(s => s.Id).ToList();
+
+
+            var ingredientsToAdd = _context.Ingredients.Where(x => SelectedIds.Contains(x.IngredientId)).ToList();
+
+            var ingredientsToRemove = _context.Ingredients.Where(x => unCheckedIds.Contains(x.IngredientId)).ToList();
+
+
+            cartItem.CartItemIngredient.ForEach(i => _context.Remove(i));
+
+            _context.SaveChangesAsync();
+            foreach (var item in ingredientsToAdd)
+            {
+                var newIngredient = new CartItemIngredient
+                {
+                    CartItem = cartItem,
+                    Ingredient = item,
+                    CartItemId = cartItem.CartItemId,
+                    IngredientId = item.IngredientId,
+                    CartItemIngredientPrice = item.Price
+
+                };
+                cartItem.CartItemIngredient.Add(newIngredient);
+            }
+
+            _context.SaveChangesAsync();
+            return RedirectToAction("Cart", "ShoppingCart");
         }
 
         public IActionResult ResetCart()
         {
             var session = HttpContext.Session;
             session.Remove("Cart");
-            return RedirectToAction("Index", "Dishes");
-        }
-
-        public IActionResult LoginCreateOrGuest()
-        {
-            return View();
+            return RedirectToAction("Index", "Dish");
         }
     }
 }

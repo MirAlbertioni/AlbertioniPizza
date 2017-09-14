@@ -14,21 +14,32 @@ namespace InmemDb.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<DishIngredient>()
-                .HasKey(di => new { di.DishId, di.IngredientId });
-
-            builder.Entity<DishCart>()
-                .HasKey(di => new { di.DishId, di.CartId });
+            builder.Entity<DishIngredient>().HasKey(x => new { x.DishId, x.IngredientId });
 
             builder.Entity<DishIngredient>()
-                .HasOne(di => di.Ingredient)
+                .HasOne(i => i.Dish)
                 .WithMany(d => d.DishIngredients)
-                .HasForeignKey(di => di.IngredientId);
+                .HasForeignKey(x => x.DishId);
+
 
             builder.Entity<DishIngredient>()
-                .HasOne(di => di.Dish)
+                .HasOne(i => i.Ingredient)
                 .WithMany(d => d.DishIngredients)
-                .HasForeignKey(di => di.DishId);
+                .HasForeignKey(x => x.IngredientId);
+
+
+
+            builder.Entity<CartItemIngredient>()
+                .HasOne(i => i.CartItem)
+                .WithMany(d => d.CartItemIngredient)
+                .HasForeignKey(x => x.CartItemId);
+
+
+            builder.Entity<CartItemIngredient>()
+                .HasOne(i => i.Ingredient)
+                .WithMany(d => d.CartItemIngredient)
+                .HasForeignKey(x => x.IngredientId);
+
 
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
@@ -39,9 +50,12 @@ namespace InmemDb.Data
         public DbSet<Dish> Dishes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<DishIngredient> DishIngredients { get; set; }
+        public DbSet<Payment> Payment { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Category> Category { get; set; }
-        public DbSet<Cart> Cart { get; set; }
-        public DbSet<DishCart> DishCart { get; set; }
-        public DbSet<IndexViewModel> IndexViewModel { get; set; }
+        public DbSet<CartItemIngredient> CartItemIngredients { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<OrderConfirmation> Order { get; set; }
     }
 }

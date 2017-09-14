@@ -112,9 +112,15 @@ namespace InmemDb.Models
             var adminUser = new ApplicationUser
             {
                 UserName = "admin@test.com",
-                Email = "admin@test.com"
+                Email = "admin@test.com",
+                Firstname = "Mir",
+                Lastname = "Albertioni",
+                Address = "Turebergs alle 40",
+                Zip = "19164",
+                City = "Sollentuna",
+                PhoneNumber = "0720234497"
             };
-            var adminuserResult = userManager.CreateAsync(adminUser, "Pa$$w0rd").Result;
+            var adminuserResult = userManager.CreateAsync(adminUser, "Test1234!").Result;
             userManager.AddToRoleAsync(adminUser, "Admin");
         }
 
@@ -124,8 +130,8 @@ namespace InmemDb.Models
             var userResult = roleManager.CreateAsync(userRole).Result;
             var user = new ApplicationUser
             {
-                UserName = "student@test.com",
-                Email = "student@test.com",
+                UserName = "user@test.com",
+                Email = "user@test.com",
                 PhoneNumber = "1234567890",
                 Address = "AbbasStreet 21",
                 Zip = "12332",
@@ -133,7 +139,8 @@ namespace InmemDb.Models
                 Firstname = "Student",
                 Lastname = "test"
             };
-            var userUserResult = userManager.CreateAsync(user, "Pa$$w0rd").Result;
+
+            var userUserResult = userManager.CreateAsync(user, "Test1234!").Result;
             userManager.AddToRoleAsync(user, "User");
         }
     }

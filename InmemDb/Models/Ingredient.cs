@@ -12,5 +12,6 @@ namespace InmemDb.Models
         public int Price { get; set; }
         public bool Enabled { get; set; }
         public List<DishIngredient> DishIngredients { get; set; }
+        public List<CartItemIngredient> CartItemIngredient { get; set; }
     }
 }

@@ -14,6 +14,7 @@ using InmemDb.Models;
 using InmemDb.Models.ManageViewModels;
 using InmemDb.Services;
 using InmemDb.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace InmemDb.Controllers
 {
@@ -60,6 +61,7 @@ namespace InmemDb.Controllers
 
             var model = new IndexViewModel
             {
+                Id = user.Id,
                 Username = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
@@ -70,7 +72,6 @@ namespace InmemDb.Controllers
                 Address = user.Address,
                 Zip = user.Zip,
                 City = user.City
-                
             };
 
             return View(model);
@@ -90,8 +91,6 @@ namespace InmemDb.Controllers
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
-            
 
             var email = user.Email;
             if (model.Email != email)
@@ -119,7 +118,7 @@ namespace InmemDb.Controllers
             user.City = model.City;
             user.PhoneNumber = model.PhoneNumber;
 
-            _context.IndexViewModel.Update(model);
+            //_context.IndexViewModel.Update(model);
             _context.SaveChanges();
 
             StatusMessage = "Your profile has been updated";

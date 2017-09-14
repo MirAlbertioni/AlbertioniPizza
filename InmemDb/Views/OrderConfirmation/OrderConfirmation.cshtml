@@ -1,0 +1,32 @@
+﻿@model OrderConfirmation
+@inject InmemDb.Services.IIngredientService _ingredientService
+
+<table>
+    <tr><td>@Model.Payment.FirstName</td></tr>
+    <tr><td>@Model.Payment.LastName</td></tr>
+    <tr><td>@Model.Payment.ShippingAddress</td></tr>
+    <tr><td>@Model.Payment.ZipCode</td></tr>
+    <tr><td>@Model.Payment.City</td></tr>
+    <tr><td>@Model.Payment.Email</td></tr>
+    <tr><td>@Model.Payment.PhoneNumber<br /><br /></td></tr>
+    <tr><td>@Model.Payment.NameOfcard</td></tr>
+    <tr><td>@Model.Payment.CardNumber</td></tr>
+    <tr><td>@Model.Payment.MMYY</td></tr>
+    <tr><td>@Model.Payment.CVC</td></tr>
+
+
+    @foreach (var item in Model.Payment.CartItem)
+    {
+        <tr><th>@item.Dish.Name</th></tr>
+        <tr><td>@item.Dish.Price</td></tr>
+            <tr>
+                <td>
+                    @foreach (var ingredient in await _ingredientService.GetIngredients(item.Dish.DishId))
+                    {
+                        @ingredient.Name<br />
+                    }
+                </td>
+            </tr>
+    }
+    <tr><th>Total : @Model.Payment.CartItem.Sum(p => p.Dish.Price * p.Quantity)</th></tr>
+</table>

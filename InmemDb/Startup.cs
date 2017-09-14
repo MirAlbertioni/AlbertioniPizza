@@ -42,8 +42,8 @@ namespace InmemDb
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<UserManager<ApplicationUser>>();
             services.AddTransient<RoleManager<IdentityRole>>();
-            services.AddTransient<IngredientService>();
-            services.AddTransient<CartService>();
+            services.AddTransient<IIngredientService, IngredientService>();
+            //services.AddTransient<ICartService, CartService>();
 
 
             services.Configure<IdentityOptions>(options =>
@@ -88,7 +88,7 @@ namespace InmemDb
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Dishes}/{action=Index}/{id?}");
+                    template: "{controller=Dish}/{action=Index}/{id?}");
             });
             DbInitializer.Initializer(context, userManager, roleManager);
         }

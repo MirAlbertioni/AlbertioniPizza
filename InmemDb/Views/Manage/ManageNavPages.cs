@@ -17,6 +17,8 @@ namespace InmemDb.Views.Manage
 
         public static string ExternalLogins => "ExternalLogins";
 
+        public static string AddCreditCard => "AddCreditCard";
+
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);

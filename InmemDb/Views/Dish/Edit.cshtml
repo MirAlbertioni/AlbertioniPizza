@@ -1,0 +1,48 @@
+﻿@model NewDishVM
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<form class="col s12" asp-controller="Dish" asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input asp-for="@Model.Dish.DishId" type="hidden" />
+    <div class="row">
+        <div class="input-field col s6">
+            <input class="validate" asp-for="@Model.Dish.Name">
+            <label>Dish</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s6">
+            <input class="validate" asp-for="@Model.Dish.Price">
+            <label>Price</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s6">
+
+            <select asp-for="@Model.IngredientIds" id="IngredientsList" style="width:200px;">
+                @foreach (var item in Model.Ingredients)
+                {
+                    <option value="@item.IngredientId">@item.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s6">
+
+            <select asp-for="@Model.Dish.CategoryId" id="CatagoriesList" style="width:200px;">
+                @foreach (var item in Model.Categories)
+                {
+                    <option value="@item.CategoryId">@item.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+    </div>
+
+</form>

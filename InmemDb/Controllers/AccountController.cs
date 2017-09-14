@@ -257,7 +257,7 @@ namespace InmemDb.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(ShoppingCartController.Index), "Home");
+            return RedirectToAction(nameof(DishController.Index), "Dish");
         }
 
         [HttpPost]
@@ -345,7 +345,7 @@ namespace InmemDb.Controllers
         {
             if (userId == null || code == null)
             {
-                return RedirectToAction(nameof(ShoppingCartController.Index), "Home");
+                return RedirectToAction(nameof(DishController.Index), "Dish");
             }
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
@@ -465,7 +465,7 @@ namespace InmemDb.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(ShoppingCartController.Index), "Home");
+                return RedirectToAction(nameof(DishController.Index), "Dish");
             }
         }
 
