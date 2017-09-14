@@ -26,7 +26,7 @@
             <div>To Pay @Model.Sum(p => p.Dish.Price * p.Quantity) KR</div>
             <a class="btn btn-primary" asp-action="ResetCart" asp-controller="ShoppingCart">Reset</a>
 
-            @if (User.IsInRole("User"))
+            @if (User.Identity.IsAuthenticated)
             {
                 <a class="btn btn-primary" asp-action="Payment" asp-controller="Payment">Buy</a>
             }

@@ -1,32 +1,35 @@
 ﻿@model OrderConfirmation
 @inject InmemDb.Services.IIngredientService _ingredientService
 
-<table>
-    <tr><td>@Model.Payment.FirstName</td></tr>
-    <tr><td>@Model.Payment.LastName</td></tr>
-    <tr><td>@Model.Payment.ShippingAddress</td></tr>
-    <tr><td>@Model.Payment.ZipCode</td></tr>
-    <tr><td>@Model.Payment.City</td></tr>
-    <tr><td>@Model.Payment.Email</td></tr>
-    <tr><td>@Model.Payment.PhoneNumber<br /><br /></td></tr>
-    <tr><td>@Model.Payment.NameOfcard</td></tr>
-    <tr><td>@Model.Payment.CardNumber</td></tr>
-    <tr><td>@Model.Payment.MMYY</td></tr>
-    <tr><td>@Model.Payment.CVC</td></tr>
-
-
-    @foreach (var item in Model.Payment.CartItem)
-    {
-        <tr><th>@item.Dish.Name</th></tr>
-        <tr><td>@item.Dish.Price</td></tr>
-            <tr>
-                <td>
-                    @foreach (var ingredient in await _ingredientService.GetIngredients(item.Dish.DishId))
-                    {
-                        @ingredient.Name<br />
-                    }
-                </td>
-            </tr>
-    }
-    <tr><th>Total : @Model.Payment.CartItem.Sum(p => p.Dish.Price * p.Quantity)</th></tr>
+<div style="margin-top:20px;">
+    Tack @Model.Payment.FirstName för ditt köp! Vi kommer skicka dina varor till <br /> 
+    @Model.Payment.ShippingAddress<br />
+    @Model.Payment.ZipCode<br />
+    asd @Model.Payment.City!<br /><br />
+    Du får ett sms skickad till <b>@Model.Payment.PhoneNumber</b> ca 30 minuter innan leverans.
+    <br /><br />
+    En orderbekräftelse har skickats till @Model.Payment.Email!
+    <br />
+    Här nedan visas ditt köp.<br /><br />
+</div>
+@foreach (var item in Model.Payment.CartItem)
+{
+<table class="col-lg-2">
+        <tr>
+            <th>@item.Dish.Name</th>
+        </tr>
+        <tr>
+            <td style="font-family:cursive">
+                @foreach (var ingredient in await _ingredientService.GetIngredients(item.Dish.DishId))
+                {
+                    @ingredient.Name<br />
+                }
+            </td>
+        </tr>
+    <tr>
+        <th>@item.Dish.Price KR</th>
+    </tr>
 </table>
+}
+<br /><br /><br /><br /><br /><br /><br />
+<h3>Total : @Model.Payment.CartItem.Sum(p => p.Dish.Price * p.Quantity)</h3>

@@ -28,10 +28,11 @@ namespace InmemDb.Controllers
         {
             var cartId = (int)HttpContext.Session.GetInt32("Cart");
             var user = await _userManager.GetUserAsync(User);
+            
 
-            if (User.IsInRole("User"))
+            if (User.Identity.IsAuthenticated)
             {
-                
+                var currentPayment = await _context.Payment.SingleOrDefaultAsync(x => x.PaymentId == paymentId);
 
                 var currentGuest = await _context.Payment
                 .Include(x => x.Cart)
@@ -40,16 +41,16 @@ namespace InmemDb.Controllers
                 .ThenInclude(x => x.Ingredient)
                 .Include(x => x.CartItem)
                 .ThenInclude(x => x.Dish)
-                .SingleOrDefaultAsync(x => x.PaymentId == paymentId && x.CartId == cartId);
+                .SingleOrDefaultAsync(x => x.PaymentId == currentPayment.PaymentId && x.CartId == cartId);
 
                 var newOrder = new OrderConfirmation
                 {
                     Payment = currentGuest
                 };
 
-                var session = HttpContext.Session;
-                session.Remove("Cart");
-                return View();
+                //var session = HttpContext.Session;
+                //session.Remove("Cart");
+                return View(newOrder);
             }
             else
             {
@@ -71,8 +72,8 @@ namespace InmemDb.Controllers
 
                 order = newOrder;
 
-                var session = HttpContext.Session;
-                session.Remove("Cart");
+                //var session = HttpContext.Session;
+                //session.Remove("Cart");
 
                 return View(newOrder);
             }

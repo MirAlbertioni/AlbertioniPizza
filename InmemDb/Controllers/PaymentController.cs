@@ -27,7 +27,7 @@ namespace InmemDb.Controllers
         {
             var cartId = (int)HttpContext.Session.GetInt32("Cart");
             var user = await _userManager.GetUserAsync(User);
-            if (User.IsInRole("User"))
+            if (User.Identity.IsAuthenticated)
             {
                 var newUser = new PaymentViewModel
                 {
@@ -65,25 +65,20 @@ namespace InmemDb.Controllers
 
             cartItems = cart.CartItem;
 
-            if (User.IsInRole("User"))
+            if (User.Identity.IsAuthenticated)
             {
                 var user = await _userManager.GetUserAsync(User);
 
                 var newModel = new PaymentViewModel
                 {
-                    User = new ApplicationUser
-                    {
-                        Firstname = model.Payment.FirstName,
-                        Lastname = model.Payment.LastName,
-                        Address = model.Payment.ShippingAddress,
-                        Zip = model.Payment.ZipCode,
-                        City = model.Payment.City,
-                        Email = model.Payment.Email,
-                        PhoneNumber = model.Payment.PhoneNumber
-
-                    },
                     Payment = new Payment
                     {
+                        FirstName = user.Firstname,
+                        LastName = user.Lastname,
+                        ShippingAddress = user.Address,
+                        ZipCode = user.Zip,
+                        Email = user.Email,
+                        PhoneNumber = user.PhoneNumber,
                         CartId = cartId,
                         Cart = cart,
                         CartItem = cartItems,
@@ -93,7 +88,10 @@ namespace InmemDb.Controllers
                         CVC = model.Payment.CVC
                     }
                 };
-                return RedirectToAction("OrderConfirmation", "OrderConfirmation", newModel);
+                await _context.Payment.AddAsync(newModel.Payment);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("OrderConfirmation", "OrderConfirmation", newModel.Payment);
             }
             else
             {
