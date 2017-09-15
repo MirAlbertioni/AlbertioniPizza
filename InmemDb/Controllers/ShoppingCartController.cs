@@ -18,10 +18,12 @@ namespace InmemDb.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly CartService _cartService;
 
-        public ShoppingCartController(ApplicationDbContext context)
+        public ShoppingCartController(ApplicationDbContext context, CartService cartService)
         {
             _context = context;
+            _cartService = cartService;
         }
 
         // GET: Dishes
@@ -32,7 +34,6 @@ namespace InmemDb.Controllers
 
         public ActionResult Cart()
         {
-            Cart cart;
             List<CartItem> cartItems;
 
             if (HttpContext.Session.GetInt32("Cart") == null)
@@ -41,17 +42,8 @@ namespace InmemDb.Controllers
             }
             else
             {
-                var cartId = (int)HttpContext.Session.GetInt32("Cart");
-
-                cart = _context.Carts
-                    .Include(i => i.CartItem)
-                    .ThenInclude(x => x.CartItemIngredient)
-                    .ThenInclude(ig => ig.Ingredient)
-                    .Include(i => i.CartItem)
-                    .ThenInclude(ci => ci.Dish)
-                    .SingleOrDefault(x => x.CartId == cartId);
-
-                cartItems = cart.CartItem;
+                var cartItemsInService = _cartService.Cart(HttpContext);
+                cartItems = cartItemsInService;
             }
 
             return View("Cart", cartItems);
@@ -59,82 +51,17 @@ namespace InmemDb.Controllers
 
         public IActionResult AddDishToCart(int dishId)
         {
-            int cartId;
-            var dish = _context.Dishes.Include(x => x.DishIngredients)
-                    .ThenInclude(i => i.Ingredient)
-                    .SingleOrDefault(d => d.DishId == dishId);
-
-            CartItem cartItem = new CartItem();
-            List<CartItemIngredient> cartItemIngredient = new List<CartItemIngredient>();
-
             if (HttpContext.Session.GetInt32("Cart") == null)
             {
-                foreach (var item in dish.DishIngredients)
-                {
-                    var newCartItemIngredient = new CartItemIngredient
-                    {
-                        CartItem = cartItem,
-                        Ingredient = item.Ingredient,
-                        IngredientId = item.IngredientId,
-                        CartItemIngredientPrice = item.Ingredient.Price
-                    };
+                var newCart = _cartService.AddDishToNewCart(dishId, HttpContext);
 
-                    cartItemIngredient.Add(newCartItemIngredient);
-                }
-
-                List<CartItem> listOfCartItems = new List<CartItem>
-                {
-                    cartItem
-                };
-
-                Cart newCart = new Cart();
-                cartItem.Dish = dish;
-                cartItem.CartId = newCart.CartId;
-                cartItem.CartItemIngredient = cartItemIngredient;
-                cartItem.Quantity = 1;
-
-                newCart.CartItem = listOfCartItems;
-
-                _context.Carts.Add(newCart);
-                _context.SaveChanges();
-
-                cartId = newCart.CartId;
-                HttpContext.Session.SetInt32("Cart", cartId);
-
-                return RedirectToAction("Index", "Dish", newCart.CartItem);
+                return RedirectToAction("Index", "Dish", newCart);
             }
             else
             {
-                cartId = (int)HttpContext.Session.GetInt32("Cart");
+                var currentCart = _cartService.AddDishToExistingCart(dishId, HttpContext);
 
-                var currentCart = _context.Carts.Include(i => i.CartItem)
-                    .ThenInclude(d => d.Dish)
-                    .SingleOrDefault(x => x.CartId == cartId);
-
-
-                foreach (var item in dish.DishIngredients)
-                {
-                    var newCartItemIngredient = new CartItemIngredient
-                    {
-                        CartItem = cartItem,
-                        Ingredient = item.Ingredient,
-                        IngredientId = item.IngredientId,
-                        CartItemIngredientPrice = item.Ingredient.Price
-                    };
-                    cartItemIngredient.Add(newCartItemIngredient);
-                }
-                var newDish = new CartItem
-                {
-                    CartId = currentCart.CartId,
-                    Dish = dish,
-                    Quantity = 1,
-                    CartItemIngredient = cartItemIngredient
-                };
-
-                _context.CartItems.Add(newDish);
-                _context.SaveChangesAsync();
-
-                return RedirectToAction("Index", "Dish", currentCart.CartItem);
+                return RedirectToAction("Index", "Dish", currentCart);
             }
         }
 
