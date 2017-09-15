@@ -18,9 +18,9 @@ namespace InmemDb.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly CartService _cartService;
+        private readonly ShoppingCartService _cartService;
 
-        public ShoppingCartController(ApplicationDbContext context, CartService cartService)
+        public ShoppingCartController(ApplicationDbContext context, ShoppingCartService cartService)
         {
             _context = context;
             _cartService = cartService;

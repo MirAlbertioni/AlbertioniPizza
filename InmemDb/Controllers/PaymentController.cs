@@ -9,6 +9,7 @@ using InmemDb.Data;
 using Microsoft.EntityFrameworkCore;
 using InmemDb.Models.ManageViewModels;
 using Microsoft.AspNetCore.Identity;
+using InmemDb.Services;
 
 namespace InmemDb.Controllers
 {
@@ -16,11 +17,13 @@ namespace InmemDb.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly PaymentService _paymentService;
 
-        public PaymentController(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        public PaymentController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, PaymentService paymentService)
         {
             _userManager = userManager;
             _context = context;
+            _paymentService = paymentService;
         }
 
         public async Task<IActionResult> Payment()
@@ -51,22 +54,22 @@ namespace InmemDb.Controllers
         [HttpPost]
         public async Task<ActionResult> Payment(PaymentViewModel model)
         {
-            var cartId = (int)HttpContext.Session.GetInt32("Cart");
-            Cart cart;
-            List<CartItem> cartItems;
-
-            cart = _context.Carts
-                    .Include(i => i.CartItem)
-                    .ThenInclude(x => x.CartItemIngredient)
-                    .ThenInclude(ig => ig.Ingredient)
-                    .Include(i => i.CartItem)
-                    .ThenInclude(ci => ci.Dish)
-                    .SingleOrDefault(x => x.CartId == cartId);
-
-            cartItems = cart.CartItem;
-
             if (User.Identity.IsAuthenticated)
             {
+                var cartId = (int)HttpContext.Session.GetInt32("Cart");
+                Cart cart;
+                List<CartItem> cartItems;
+
+                cart = _context.Carts
+                        .Include(i => i.CartItem)
+                        .ThenInclude(x => x.CartItemIngredient)
+                        .ThenInclude(ig => ig.Ingredient)
+                        .Include(i => i.CartItem)
+                        .ThenInclude(ci => ci.Dish)
+                        .SingleOrDefault(x => x.CartId == cartId);
+
+                cartItems = cart.CartItem;
+
                 var user = await _userManager.GetUserAsync(User);
 
                 var newModel = new PaymentViewModel
@@ -91,31 +94,11 @@ namespace InmemDb.Controllers
                 await _context.Payment.AddAsync(newModel.Payment);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("OrderConfirmation", "OrderConfirmation", newModel.Payment);
+                return RedirectToAction("OrderConfirmation", "OrderConfirmation", newModel);
             }
             else
             {
-                var newPayment = new Payment()
-                {
-                    PaymentId = model.Payment.PaymentId,
-                    FirstName = model.Payment.FirstName,
-                    LastName = model.Payment.LastName,
-                    ShippingAddress = model.Payment.ShippingAddress,
-                    ZipCode = model.Payment.ZipCode,
-                    Email = model.Payment.Email,
-                    PhoneNumber = model.Payment.PhoneNumber,
-                    City = model.Payment.City,
-                    CartId = cartId,
-                    Cart = cart,
-                    CartItem = cartItems,
-                    NameOfcard = model.Payment.NameOfcard,
-                    CardNumber = model.Payment.CardNumber,
-                    MMYY = model.Payment.MMYY,
-                    CVC = model.Payment.CVC
-                };
-
-                await _context.Payment.AddAsync(newPayment);
-                await _context.SaveChangesAsync();
+                var newPayment = await _paymentService.PaymentCustomerPost(model, HttpContext);
 
                 return RedirectToAction("OrderConfirmation", "OrderConfirmation", newPayment);
             }

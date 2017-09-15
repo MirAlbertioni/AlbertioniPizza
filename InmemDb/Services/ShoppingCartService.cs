@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace InmemDb.Services
 {
-    public class CartService
+    public class ShoppingCartService
     {
         private readonly ApplicationDbContext _context;
 
-        public CartService(ApplicationDbContext context)
+        public ShoppingCartService(ApplicationDbContext context)
         {
             _context = context;
         }

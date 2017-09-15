@@ -43,8 +43,8 @@ namespace InmemDb
             services.AddTransient<UserManager<ApplicationUser>>();
             services.AddTransient<RoleManager<IdentityRole>>();
             services.AddTransient<IIngredientService, IngredientService>();
-            services.AddTransient<CartService>();
-            //services.AddTransient<ICartService, CartService>();
+            services.AddTransient<ShoppingCartService>();
+            services.AddTransient<PaymentService>();
 
 
             services.Configure<IdentityOptions>(options =>
