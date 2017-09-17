@@ -14,8 +14,7 @@
                 {
                     <p>
                         <input type="checkbox" asp-for="@Model.SelectedIngredients[i].Enabled" />
-                        <label asp-for="@Model.SelectedIngredients[i].Enabled">@Model.SelectedIngredients[i].Name 
-                                                                                @Model.SelectedIngredients[i].Price Kr </label>
+                        <label asp-for="@Model.SelectedIngredients[i].Enabled">@Model.SelectedIngredients[i].Name @Model.SelectedIngredients[i].Price Kr </label>
                         <input type="hidden" asp-for="@Model.SelectedIngredients[i].Id" />
                         <input type="hidden" asp-for="@Model.SelectedIngredients[i].Name" />
                     </p>

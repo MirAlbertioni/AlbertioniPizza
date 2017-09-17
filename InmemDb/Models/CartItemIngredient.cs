@@ -12,7 +12,8 @@ namespace InmemDb.Models
         public CartItem CartItem { get; set; }
         public int IngredientId { get; set; }
         public Ingredient Ingredient { get; set; }
-        public int CartItemIngredientPrice { get; set; }
+        public decimal CartItemIngredientPrice { get; set; }
         public bool Enabled { get; set; }
+        public SelectedIngredients SelectedIngredients { get; set; }
     }
 }

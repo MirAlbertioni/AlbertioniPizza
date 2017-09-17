@@ -126,12 +126,12 @@ namespace InmemDb.Services
             return currentCart.CartItem;
         }
 
-        public DishIngredientVM EditDishIngredientsInCartGet(int cartItemId, int dishId, int ingredientId, HttpContext httpContext)
+        public DishIngredientVM EditDishIngredientsInCartGet(int cartItemId, int dishId, HttpContext httpContext)
         {
             var cartId = httpContext.Session.GetInt32("Cart");
             var newDishVM = new DishIngredientVM();
 
-            var ingredients = _context.Ingredients.ToList();
+            var ingredients =  _context.Ingredients.ToList();
 
             var cartItem = _context.CartItems
                 .Include(x => x.Dish)
@@ -153,7 +153,7 @@ namespace InmemDb.Services
                 {
                     selected.Enabled = true;
                 }
-                if (_context.DishIngredients.Any(di => di.DishId == dishId && di.IngredientId == ingredientId))
+                if (EnabledIngredientIsNull(dishId, item.IngredientId))
                     selected.Price = 0;
                 selectedIngredients.Add(selected);
             }
@@ -165,6 +165,11 @@ namespace InmemDb.Services
             newDishVM.CartItemId = cartItem.CartItemId;
 
             return newDishVM;
+        }
+
+        public bool EnabledIngredientIsNull(int dishId, int ingredientId)
+        {
+            return _context.DishIngredients.Any(di => di.DishId == dishId && di.IngredientId == ingredientId);
         }
 
         public void EditDishIngredientsInCartPost(DishIngredientVM dishIngredientVM, HttpContext httpContext)
@@ -206,6 +211,33 @@ namespace InmemDb.Services
                 cartItem.CartItemIngredient.Add(newIngredient);
             }
             _context.SaveChangesAsync();
+        }
+
+        public decimal TotalPriceForCart(int cartId)
+        {
+            var cart = _context.Carts
+                    .Include(i => i.CartItem)
+                    .ThenInclude(x => x.CartItemIngredient)
+                    .ThenInclude(ig => ig.Ingredient)
+                    .Include(i => i.CartItem)
+                    .ThenInclude(ci => ci.Dish)
+                    .SingleOrDefault(x => x.CartId == cartId);
+            decimal totPrice = 0;
+
+            foreach (var item in cart.CartItem)
+            {
+                totPrice += item.Dish.Price;
+
+                foreach (var x in item.CartItemIngredient)
+                {
+                    if (EnabledIngredientIsNull(item.Dish.DishId, x.IngredientId))
+                    {
+                        x.CartItemIngredientPrice = 0;
+                    }
+                    totPrice += x.CartItemIngredientPrice;
+                }
+            }
+            return totPrice;
         }
     }
 }

@@ -12,5 +12,6 @@ namespace InmemDb.Models
         public int CartId { get; set; }
         public int Quantity { get; set; }
         public List<CartItemIngredient> CartItemIngredient { get; set; }
+        public List<Dish> DishList { get; set; }
     }
 }

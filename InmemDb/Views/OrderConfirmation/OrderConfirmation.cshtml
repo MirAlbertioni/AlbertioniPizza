@@ -1,5 +1,6 @@
 ﻿@model OrderConfirmation
 @inject InmemDb.Services.IIngredientService _ingredientService
+@inject InmemDb.Services.ShoppingCartService _cartService
 
 <div style="margin-top:20px;">
     Tack @Model.Payment.FirstName för ditt köp! Vi kommer skicka dina varor till <br /> 
@@ -32,4 +33,4 @@
 </table>
 }
 <br /><br /><br /><br /><br /><br /><br />
-<h3>Total : @Model.Payment.CartItem.Sum(p => p.Dish.Price * p.Quantity)</h3>
+<h3>Total : @_cartService.TotalPriceForCart(Model.Payment.CartId)</h3>

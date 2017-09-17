@@ -18,12 +18,15 @@ namespace InmemDb.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaymentService _paymentService;
+        private readonly ShoppingCartService _cart;
 
-        public PaymentController(UserManager<ApplicationUser> userManager, ApplicationDbContext context, PaymentService paymentService)
+        public PaymentController(UserManager<ApplicationUser> userManager, ApplicationDbContext context
+            , PaymentService paymentService, ShoppingCartService cartService)
         {
             _userManager = userManager;
             _context = context;
             _paymentService = paymentService;
+            _cart = cartService;
         }
 
         public async Task<IActionResult> Payment()
@@ -104,9 +107,19 @@ namespace InmemDb.Controllers
             }
         }
 
-        public IActionResult LoginCreateOrGuest()
+        public async Task<IActionResult> CheckOut(int paymentId)
         {
-            return View();
+            var cartId = (int)HttpContext.Session.GetInt32("Cart");
+
+            var currentCart = await _context.Carts
+                .Include(i => i.CartItem)
+                .ThenInclude(x => x.CartItemIngredient)
+                .ThenInclude(ig => ig.Ingredient)
+                .Include(i => i.CartItem)
+                .ThenInclude(ci => ci.Dish)
+                .SingleOrDefaultAsync(x => x.CartId == cartId);
+
+            return View(currentCart);
         }
     }
 }

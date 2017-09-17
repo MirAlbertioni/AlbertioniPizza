@@ -1,39 +1,40 @@
 ﻿@model List<InmemDb.Models.CartItem>
 @inject InmemDb.Services.IIngredientService _ingredientService
+@inject InmemDb.Services.ShoppingCartService _cartService
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<div class="navbar-collapse collapse">
-    <ul class="nav navbar-collapse" style="background-color:ghostwhite;">
-        @foreach (var dish in Model)
-        {
-            <li>
-                <b>@dish.Dish.Name<br /></b>
-
-                @dish.Dish.Price KR
+<table class="col-lg-4">
+    @foreach (var dish in Model)
+    {
+        <tr>
+            <th>@dish.Dish.Name</th>
+            <td>@dish.Dish.Price <b>KR</b></td>
+            <td>
                 <a class="glyphicon glyphicon-shopping-cart"
                    asp-action="EditDishIngredientsInCart"
                    asp-controller="ShoppingCart"
                    asp-route-dishId="@dish.Dish.DishId"
-                   asp-route-cartItemId="@dish.CartItemId"
-                   >
+                   asp-route-cartItemId="@dish.CartItemId">
                     edit
                 </a>
-            </li>
-        }
-        <li>
-            <div>To Pay @Model.Sum(p => p.Dish.Price * p.Quantity) KR</div>
+            </td>
+        </tr>
+    }
+    <tr>
+        <td>
             <a class="btn btn-primary" asp-action="ResetCart" asp-controller="ShoppingCart">Reset</a>
-
+        </td>
+        <td>
             @if (User.Identity.IsAuthenticated)
             {
                 <a class="btn btn-primary" asp-action="Payment" asp-controller="Payment">Buy</a>
             }
             else
             {
-                <a class="btn btn-primary" asp-action="LoginCreateOrGuest" asp-controller="Payment">Checkout</a>
+                <a class="btn btn-primary" asp-action="CheckOut" asp-controller="Payment">Checkout</a>
             }
-        </li>
-    </ul>
-</div>
+        </td>
+    </tr>
+</table>

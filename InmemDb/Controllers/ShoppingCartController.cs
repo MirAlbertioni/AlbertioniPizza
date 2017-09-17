@@ -46,7 +46,7 @@ namespace InmemDb.Controllers
                 cartItems = cartItemsInService;
             }
 
-            return View("Cart", cartItems);
+            return PartialView("_Cart", cartItems);
         }
 
         public IActionResult AddDishToCart(int dishId)
@@ -55,19 +55,19 @@ namespace InmemDb.Controllers
             {
                 var newCart = _cartService.AddDishToNewCart(dishId, HttpContext);
 
-                return RedirectToAction("Index", "Dish", newCart);
+                return PartialView("_Cart", newCart);
             }
             else
             {
                 var currentCart = _cartService.AddDishToExistingCart(dishId, HttpContext);
 
-                return RedirectToAction("Index", "Dish", currentCart);
+                return PartialView("_Cart", currentCart);
             }
         }
 
-        public IActionResult EditDishIngredientsInCart(int cartItemId, int dishId, int ingredientId)
+        public IActionResult EditDishIngredientsInCart(int cartItemId, int dishId)
         {
-            var editInCartGet = _cartService.EditDishIngredientsInCartGet(cartItemId, dishId, ingredientId, HttpContext);
+            var editInCartGet = _cartService.EditDishIngredientsInCartGet(cartItemId, dishId, HttpContext);
             return View("EditDishIngredientsInCart", editInCartGet);
         }
 
@@ -75,7 +75,7 @@ namespace InmemDb.Controllers
         public IActionResult EditDishIngredientsInCart(DishIngredientVM dishIngredientVM)
         {
             _cartService.EditDishIngredientsInCartPost(dishIngredientVM, HttpContext);
-            return RedirectToAction("Cart", "ShoppingCart");
+            return RedirectToAction("Index", "Dish");
         }
 
         public IActionResult ResetCart()

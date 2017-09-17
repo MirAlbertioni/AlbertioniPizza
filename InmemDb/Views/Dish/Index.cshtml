@@ -11,7 +11,7 @@
     <h2><a asp-action="Edit" asp-controller="Dish">Create new dish</a></h2>
 
         
-<div>
+<div class="col-lg-8">
     <table>
         <tr>
             <td style="font-size:30px;background-color:green;color:white;">Dishes</td>
@@ -32,9 +32,14 @@
                 <td>@Html.DisplayFor(modelItem => item.Price)</td>
                 <td>
                     <a class="btn btn-primary"
-                        asp-controller="ShoppingCart"
-                        asp-action="AddDishToCart"
-                        asp-route-dishId=@item.DishId>
+                       asp-controller="ShoppingCart"
+                       asp-action="AddDishToCart"
+                       asp-route-dishId=@item.DishId
+                       data-ajax="true"
+                       data-ajax-method="GET"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#CartPartial"
+                       >
                         Add
                     </a>
                 </td>
@@ -57,3 +62,4 @@
 </div>
 
 
+<div id="CartPartial"></div>
