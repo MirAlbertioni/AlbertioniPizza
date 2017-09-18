@@ -1,15 +1,20 @@
 ﻿@model InmemDb.Models.Cart
 @inject InmemDb.Services.ShoppingCartService _cartService
 
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+<link href="~/css/HomeIndexTable.css" rel="stylesheet" />
+
 <div class="col-lg-12">
     <div class="well well-sm">
-        <h2>Varukorg</h2>
+        <h2>Cart</h2>
         <table class="table table-condensed">
             <thead>
                 <tr>
                     <th>Pizza</th>
-                    <th>Pris</th>
-                    <th>Antal</th>
+                    <th>Ingredients</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
                     <th>Edit</th>
                 </tr>
             </thead>
@@ -20,39 +25,51 @@
                         @_cartService.TotalPriceForCart(Model.CartId)
                     </td>
                 </tr>
-
             </tfoot>
-
             <tbody>
                 @foreach (var x in Model.CartItem)
                 {
-                    
-                        <tr>
-                            <td>@x.Dish.Name</td>
-                            <td>@x.Dish.Price</td>
-                            <td>@x.Quantity</td>
-                            <td>
-                                <a class="glyphicon glyphicon-shopping-cart"
-                                   asp-action="EditDishIngredientsInCart"
-                                   asp-controller="ShoppingCart"
-                                   asp-route-dishId="@x.Dish.DishId"
-                                   asp-route-cartItemId="@x.CartItemId">
-                                    edit
-                                </a>
-                            </td>
-                        </tr>
-                    
-                    @foreach (var ingredient in x.CartItemIngredient)
-                    {
-                        if (ingredient.CartItemIngredientPrice > 0)
+                    <tr>
+                        <td>@x.Dish.Name</td><td>
+                        @foreach (var ingredient in x.CartItemIngredient)
                         {
-                            <tr>
-                                <td>@ingredient.Ingredient.Name</td>
-                                <td>@ingredient.CartItemIngredientPrice kr</td>
-                            </tr>
+                            if (ingredient.CartItemIngredientPrice > 0)
+                            {
+                                <b style="color:pink;">@ingredient.Ingredient.Name</b><br />
+                            }
+                            else
+                            {
+                                @ingredient.Ingredient.Name<br />
+                            }
                         }
-
-                    }
+                        </td>
+                        <td>
+                            @x.Dish.Price<br />
+                            @foreach (var ingredient in x.CartItemIngredient)
+                            {
+                                if (ingredient.CartItemIngredientPrice > 0)
+                                {
+                                    <b>@ingredient.Ingredient.Price KR</b><br />
+                                }
+                            }
+                        </td>
+                        <td>@x.Quantity</td>
+                        <td>
+                            <a data-toggle="modal" data-target="#ingredientModal"
+                                class="glyphicon glyphicon-shopping-cart"
+                                asp-action="EditDishIngredientsInCart"
+                                asp-controller="ShoppingCart"
+                                asp-route-dishId="@x.Dish.DishId"
+                                asp-route-cartItemId="@x.CartItemId"
+                                data-ajax="true"
+                                data-ajax-method="GET"
+                                data-ajax-mode="replace"
+                                data-ajax-update="#ingredientModal"
+                                onclick="$('#ingredientModal').modal('open');">
+                                edit
+                            </a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

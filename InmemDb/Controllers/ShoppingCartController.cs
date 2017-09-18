@@ -68,7 +68,7 @@ namespace InmemDb.Controllers
         public IActionResult EditDishIngredientsInCart(int cartItemId, int dishId)
         {
             var editInCartGet = _cartService.EditDishIngredientsInCartGet(cartItemId, dishId, HttpContext);
-            return View("EditDishIngredientsInCart", editInCartGet);
+            return PartialView("_EditDishIngredientsInCart", editInCartGet);
         }
 
         [HttpPost]

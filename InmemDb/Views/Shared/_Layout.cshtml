@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="~/css/ModalRight.css" rel="stylesheet" />
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
@@ -52,17 +53,14 @@
     </nav>
     <div class="container body-content">
         @RenderBody()
+        <div style="position:fixed;" id="ingredientModal" class="modal modal-fixed-footer">
+        </div>
         <hr />
         @*<footer>
                 <p>&copy; 2017 - InmemDb</p>
             </footer>*@
     </div>
-
-    <!-- Compiled and minified JavaScript -->
-    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-    <script src="~/js/materialize.js"></script>*@
-
-
+    
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
         $(function () {

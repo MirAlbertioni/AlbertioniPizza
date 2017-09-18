@@ -5,23 +5,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<table class="col-lg-4">
-    @foreach (var dish in Model)
-    {
-        <tr>
-            <th>@dish.Dish.Name</th>
-            <td>@dish.Dish.Price <b>KR</b></td>
-            <td>
-                <a class="glyphicon glyphicon-shopping-cart"
-                   asp-action="EditDishIngredientsInCart"
-                   asp-controller="ShoppingCart"
-                   asp-route-dishId="@dish.Dish.DishId"
-                   asp-route-cartItemId="@dish.CartItemId">
-                    edit
-                </a>
-            </td>
-        </tr>
-    }
+<table>
     <tr>
         <td>
             <a class="btn btn-primary" asp-action="ResetCart" asp-controller="ShoppingCart">Reset</a>
@@ -37,4 +21,37 @@
             }
         </td>
     </tr>
+
+        @foreach (var dish in Model)
+        {
+            <tr>
+                <th>@dish.Dish.Name</th>
+                <td>@dish.Dish.Price <b>KR</b></td>
+                <td>
+                    @foreach (var ingredient in dish.CartItemIngredient)
+                    {
+                        if (ingredient.CartItemIngredientPrice > 0)
+                        {
+                            @ingredient.Ingredient.Name<br />
+                        }
+                    }
+                </td>
+
+            <td>
+                <a data-toggle="modal" data-target="#ingredientModal"
+                   class="glyphicon glyphicon-shopping-cart"
+                   asp-action="EditDishIngredientsInCart"
+                   asp-controller="ShoppingCart"
+                   asp-route-dishId="@dish.Dish.DishId"
+                   asp-route-cartItemId="@dish.CartItemId"
+                   data-ajax="true"
+                   data-ajax-method="GET"
+                   data-ajax-mode="replace"
+                   data-ajax-update="#ingredientModal"
+                   onclick="$('#ingredientModal').modal('open');">
+                    edit
+                </a>
+            </td>
+        </tr>
+    }
 </table>
