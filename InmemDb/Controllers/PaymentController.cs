@@ -35,20 +35,23 @@ namespace InmemDb.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (User.Identity.IsAuthenticated)
             {
-                var newUser = new PaymentViewModel
+                if(ModelState.IsValid)
                 {
-                    User = new ApplicationUser
+                    var newUser = new PaymentViewModel
                     {
-                        Firstname = user.Firstname,
-                        Lastname = user.Lastname,
-                        Address = user.Address,
-                        Zip = user.Zip,
-                        City = user.City,
-                        Email = user.Email,
-                        PhoneNumber = user.PhoneNumber
-                    }
-                };
-                return View(newUser);
+                        User = new ApplicationUser
+                        {
+                            Firstname = user.Firstname,
+                            Lastname = user.Lastname,
+                            Address = user.Address,
+                            Zip = user.Zip,
+                            City = user.City,
+                            Email = user.Email,
+                            PhoneNumber = user.PhoneNumber
+                        }
+                    };
+                    return View(newUser);
+                }
             }
 
             return View();
@@ -57,54 +60,58 @@ namespace InmemDb.Controllers
         [HttpPost]
         public async Task<ActionResult> Payment(PaymentViewModel model)
         {
-            if (User.Identity.IsAuthenticated)
+            if (ModelState.IsValid)
             {
-                var cartId = (int)HttpContext.Session.GetInt32("Cart");
-                Cart cart;
-                List<CartItem> cartItems;
-
-                cart = _context.Carts
-                        .Include(i => i.CartItem)
-                        .ThenInclude(x => x.CartItemIngredient)
-                        .ThenInclude(ig => ig.Ingredient)
-                        .Include(i => i.CartItem)
-                        .ThenInclude(ci => ci.Dish)
-                        .SingleOrDefault(x => x.CartId == cartId);
-
-                cartItems = cart.CartItem;
-
-                var user = await _userManager.GetUserAsync(User);
-
-                var newModel = new PaymentViewModel
+                if (User.Identity.IsAuthenticated)
                 {
-                    Payment = new Payment
+                    var cartId = (int)HttpContext.Session.GetInt32("Cart");
+                    Cart cart;
+                    List<CartItem> cartItems;
+
+                    cart = _context.Carts
+                            .Include(i => i.CartItem)
+                            .ThenInclude(x => x.CartItemIngredient)
+                            .ThenInclude(ig => ig.Ingredient)
+                            .Include(i => i.CartItem)
+                            .ThenInclude(ci => ci.Dish)
+                            .SingleOrDefault(x => x.CartId == cartId);
+
+                    cartItems = cart.CartItem;
+
+                    var user = await _userManager.GetUserAsync(User);
+
+                    var newModel = new PaymentViewModel
                     {
-                        FirstName = user.Firstname,
-                        LastName = user.Lastname,
-                        ShippingAddress = user.Address,
-                        ZipCode = user.Zip,
-                        Email = user.Email,
-                        PhoneNumber = user.PhoneNumber,
-                        CartId = cartId,
-                        Cart = cart,
-                        CartItem = cartItems,
-                        NameOfcard = model.Payment.NameOfcard,
-                        CardNumber = model.Payment.CardNumber,
-                        MMYY = model.Payment.MMYY,
-                        CVC = model.Payment.CVC
-                    }
-                };
-                await _context.Payment.AddAsync(newModel.Payment);
-                await _context.SaveChangesAsync();
+                        Payment = new Payment
+                        {
+                            FirstName = user.Firstname,
+                            LastName = user.Lastname,
+                            ShippingAddress = user.Address,
+                            ZipCode = user.Zip,
+                            Email = user.Email,
+                            PhoneNumber = user.PhoneNumber,
+                            CartId = cartId,
+                            Cart = cart,
+                            CartItem = cartItems,
+                            NameOfcard = model.Payment.NameOfcard,
+                            CardNumber = model.Payment.CardNumber,
+                            MMYY = model.Payment.MMYY,
+                            CVC = model.Payment.CVC
+                        }
+                    };
+                    await _context.Payment.AddAsync(newModel.Payment);
+                    await _context.SaveChangesAsync();
 
-                return RedirectToAction("OrderConfirmation", "OrderConfirmation", newModel);
-            }
-            else
-            {
-                var newPayment = await _paymentService.PaymentCustomerPost(model, HttpContext);
+                    return RedirectToAction("OrderConfirmation", "OrderConfirmation", newModel);
+                }
+                else
+                {
+                    var newPayment = await _paymentService.PaymentCustomerPost(model, HttpContext);
 
-                return RedirectToAction("OrderConfirmation", "OrderConfirmation", newPayment);
+                    return RedirectToAction("OrderConfirmation", "OrderConfirmation", newPayment);
+                }
             }
+            return View();
         }
 
         public async Task<IActionResult> Checkout(int paymentId)

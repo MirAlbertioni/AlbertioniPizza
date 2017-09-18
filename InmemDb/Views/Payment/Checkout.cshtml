@@ -35,7 +35,7 @@
                         {
                             if (ingredient.CartItemIngredientPrice > 0)
                             {
-                                <b style="color:pink;">@ingredient.Ingredient.Name</b><br />
+                                <b style="color:red;">@ingredient.Ingredient.Name | @ingredient.Ingredient.Price KR</b><br />
                             }
                             else
                             {
@@ -44,14 +44,26 @@
                         }
                         </td>
                         <td>
-                            @x.Dish.Price<br />
-                            @foreach (var ingredient in x.CartItemIngredient)
-                            {
-                                if (ingredient.CartItemIngredientPrice > 0)
-                                {
-                                    <b>@ingredient.Ingredient.Price KR</b><br />
-                                }
+                            @{ 
+                                decimal totPrice = 0;
+
+                                totPrice += x.Dish.Price;
+
+                                    foreach (var c in x.CartItemIngredient)
+                                    {
+                                        if (_cartService.EnabledIngredientIsNull(x.Dish.DishId, c.IngredientId))
+                                        {
+                                            c.CartItemIngredientPrice = 0;
+                                        }
+                                        totPrice += c.CartItemIngredientPrice;
+                                    }
                             }
+                            @x.Dish.Price
+                            @if (totPrice != x.Dish.Price)
+                            {
+                                <p style="color:red;">(@totPrice) KR</p>
+                            }
+
                         </td>
                         <td>@x.Quantity</td>
                         <td>
