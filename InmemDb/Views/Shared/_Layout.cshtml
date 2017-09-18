@@ -18,8 +18,6 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
     </environment>
-        @*<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">*@
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -56,34 +54,12 @@
         <div id="ingredientModal" class="modal">
         </div>
         <hr />
-        @*<footer>
-                <p>&copy; 2017 - InmemDb</p>
-            </footer>*@
     </div>
     
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-        $(function () {
+    <script src="~/js/ShowCart.js"></script>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
-            $("#ShowCart").click(function () {
-
-                $.ajax({
-                    type: "POST",
-                    url: "ShoppingCart/Cart",
-
-                    success: function (data) {
-                        $('#CartPartial').html(data);
-
-                    },
-                    error: function () {
-
-                    }
-                });
-            });
-
-        });
-    </script>
 
     @RenderSection("Scripts", required: false)
 </body>

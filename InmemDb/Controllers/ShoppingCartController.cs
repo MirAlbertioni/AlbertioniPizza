@@ -75,7 +75,7 @@ namespace InmemDb.Controllers
         public IActionResult EditDishIngredientsInCart(DishIngredientVM dishIngredientVM)
         {
             _cartService.EditDishIngredientsInCartPost(dishIngredientVM, HttpContext);
-            return RedirectToAction("Index", "Dish");
+            return View();
         }
 
         public IActionResult ResetCart()

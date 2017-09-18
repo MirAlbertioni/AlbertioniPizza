@@ -1,22 +1,20 @@
 ﻿$(function () {
 
- 
+
     $("#ShowCart").click(function () {
 
         $.ajax({
             type: "POST",
-            url: "Cart/Index",
-            
+            url: "ShoppingCart/Cart",
+
             success: function (data) {
-                $('#Cart').html(data);
+                $('#CartPartial').html(data);
 
             },
             error: function () {
-                
+
             }
         });
     });
 
 });
-
-                       
