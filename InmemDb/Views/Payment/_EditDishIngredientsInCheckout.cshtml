@@ -1,0 +1,37 @@
+﻿@model InmemDb.Models.DishIngredientVM
+
+<h2>Edit</h2>
+
+<h4>Dish</h4>
+<hr />
+
+
+
+<form asp-controller="Payment" asp-action="EditDishIngredientsInCheckout" method="post">
+    <div class="modal-sm" style="margin:auto;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Choose extra ingredients</h4>
+            </div>
+            <div class="modal-body">
+                <input asp-for="@Model.Dish" type="hidden" />
+                <input asp-for="@Model.DishId" type="hidden" />
+                <input asp-for="@Model.CartItemId" type="hidden" />
+                @for (var i = 0; i < Model.SelectedIngredients.Count(); i++)
+                {
+                    <div>
+                        <input type="checkbox" asp-for="@Model.SelectedIngredients[i].Enabled" />
+                        <label asp-for="@Model.SelectedIngredients[i].Enabled">@Model.SelectedIngredients[i].Name @Model.SelectedIngredients[i].Price Kr </label>
+                        <input type="hidden" asp-for="@Model.SelectedIngredients[i].Id" />
+                        <input type="hidden" asp-for="@Model.SelectedIngredients[i].Name" />
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <input type="submit" value="Update" class="btn btn-default" />
+                <input type="button" class="btn btn-default" data-dismiss="modal" value="Close" />
+            </div>
+        </div>
+    </div>
+</form>

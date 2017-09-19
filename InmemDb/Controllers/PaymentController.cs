@@ -145,5 +145,18 @@ namespace InmemDb.Controllers
 
             return RedirectToAction("Checkout", "Payment");
         }
+
+        public IActionResult EditDishIngredientsInCheckout(int cartItemId, int dishId)
+        {
+            var editInCartGet = _cartService.EditDishIngredientsInCartGet(cartItemId, dishId, HttpContext);
+            return PartialView("_EditDishIngredientsInCheckout", editInCartGet);
+        }
+
+        [HttpPost]
+        public IActionResult EditDishIngredientsInCheckout(DishIngredientVM dishIngredientVM)
+        {
+            _cartService.EditDishIngredientsInCartPost(dishIngredientVM, HttpContext);
+            return RedirectToAction("Checkout", "Payment");
+        }
     }
 }

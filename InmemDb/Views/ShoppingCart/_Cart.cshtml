@@ -27,19 +27,10 @@
             <tr>
                 <th>@dish.Dish.Name</th>
                 <td>@dish.Dish.Price <b>KR</b></td>
-                <td>
-                    @foreach (var ingredient in dish.CartItemIngredient)
-                    {
-                        if (ingredient.CartItemIngredientPrice > 0)
-                        {
-                            @ingredient.Ingredient.Name<br />
-                        }
-                    }
-                </td>
 
             <td>
                 <a data-toggle="modal" data-target="#ingredientModal"
-                   class="glyphicon glyphicon-shopping-cart"
+                   class="glyphicon glyphicon-edit"
                    asp-action="EditDishIngredientsInCart"
                    asp-controller="ShoppingCart"
                    asp-route-dishId="@dish.Dish.DishId"
@@ -49,18 +40,7 @@
                    data-ajax-mode="replace"
                    data-ajax-update="#ingredientModal"
                    onclick="$('#ingredientModal').modal('open');">
-                    edit
-                </a>
-                <a class="btn btn-warning" asp-action="RemoveProduct"
-                   asp-controller="ShoppingCart"
-                   asp-route-dishId="@dish.Dish.DishId"
-                   asp-route-cartItemId="@dish.CartItemId"
-                   data-ajax="true"
-                   data-ajax-method="GET"
-                   data-ajax-mode="replace"
-                   data-ajax-update="#Cart"
-                   >
-                    -
+                    
                 </a>
             </td>
         </tr>

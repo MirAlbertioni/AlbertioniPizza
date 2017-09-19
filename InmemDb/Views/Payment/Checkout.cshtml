@@ -68,9 +68,9 @@
                         <td>@x.Quantity</td>
                         <td>
                             <a data-toggle="modal" data-target="#ingredientModal"
-                                class="glyphicon glyphicon-shopping-cart"
-                                asp-action="EditDishIngredientsInCart"
-                                asp-controller="ShoppingCart"
+                                class="glyphicon glyphicon-edit"
+                                asp-action="EditDishIngredientsInCheckout"
+                                asp-controller="Payment"
                                 asp-route-dishId="@x.Dish.DishId"
                                 asp-route-cartItemId="@x.CartItemId"
                                 data-ajax="true"
@@ -78,13 +78,13 @@
                                 data-ajax-mode="replace"
                                 data-ajax-update="#ingredientModal"
                                 onclick="$('#ingredientModal').modal('open');">
-                                edit
                             </a>
-                            <a class="btn btn-warning" asp-action="RemoveProduct"
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a class="glyphicon glyphicon-remove" 
+                               asp-action="RemoveProduct"
                                asp-controller="Payment"
                                asp-route-dishId="@x.Dish.DishId"
                                asp-route-cartItemId="@x.CartItemId">
-                                -
                             </a>
                         </td>
                     </tr>
