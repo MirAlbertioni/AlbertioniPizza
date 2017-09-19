@@ -128,5 +128,22 @@ namespace InmemDb.Controllers
 
             return View(currentCart);
         }
+
+        public IActionResult RemoveProduct(int dishId, int cartItemId)
+        {
+            var cartId = HttpContext.Session.GetInt32("Cart");
+
+            var cart = _context.Carts.Include(x => x.CartItem).SingleOrDefaultAsync(a => a.CartId == cartId);
+
+            var cartItem = _context.CartItems
+                .Include(x => x.Dish)
+                .Include(i => i.CartItemIngredient)
+                .ThenInclude(s => s.Ingredient).SingleOrDefault(x => x.CartId == cartId && x.Dish.DishId == dishId && x.CartItemId == cartItemId);
+
+            _context.CartItems.Remove(cartItem);
+            _context.SaveChangesAsync();
+
+            return RedirectToAction("Checkout", "Payment");
+        }
     }
 }

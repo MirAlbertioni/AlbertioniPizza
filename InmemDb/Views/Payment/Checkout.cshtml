@@ -80,6 +80,12 @@
                                 onclick="$('#ingredientModal').modal('open');">
                                 edit
                             </a>
+                            <a class="btn btn-warning" asp-action="RemoveProduct"
+                               asp-controller="Payment"
+                               asp-route-dishId="@x.Dish.DishId"
+                               asp-route-cartItemId="@x.CartItemId">
+                                -
+                            </a>
                         </td>
                     </tr>
                 }

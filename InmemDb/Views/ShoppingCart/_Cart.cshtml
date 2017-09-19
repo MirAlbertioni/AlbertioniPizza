@@ -51,6 +51,17 @@
                    onclick="$('#ingredientModal').modal('open');">
                     edit
                 </a>
+                <a class="btn btn-warning" asp-action="RemoveProduct"
+                   asp-controller="ShoppingCart"
+                   asp-route-dishId="@dish.Dish.DishId"
+                   asp-route-cartItemId="@dish.CartItemId"
+                   data-ajax="true"
+                   data-ajax-method="GET"
+                   data-ajax-mode="replace"
+                   data-ajax-update="#Cart"
+                   >
+                    -
+                </a>
             </td>
         </tr>
     }
