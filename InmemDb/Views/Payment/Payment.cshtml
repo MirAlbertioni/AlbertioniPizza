@@ -8,47 +8,50 @@
 <form asp-action="Payment" asp-controller="Payment" method="post">
     <div class="row">
         <div class="col-lg-4">
-            <div asp-validation-summary="All" class="text-danger"></div>
+            
             @if (User.Identity.IsAuthenticated)
             {
+                <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="User.Firstname"></label>
-                    <input asp-for="User.Firstname" class="form-control" disabled/>
-                    <span asp-validation-for="Payment.FirstName" class="text-danger"></span>
+                    <input asp-for="User.Firstname" class="form-control"/>
+                    <span asp-validation-for="User.Lastname" class="text-danger"></span>
+
                 </div>
                 <div class="form-group">
                     <label asp-for="User.Lastname"></label>
-                    <input asp-for="User.Lastname" class="form-control" disabled/>
-                    <span asp-validation-for="Payment.LastName" class="text-danger"></span>
+                    <input asp-for="User.Lastname" class="form-control"/>
+                    <span asp-validation-for="User.Lastname" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="User.Address"></label>
                     <input asp-for="User.Address" class="form-control" />
-                    <span asp-validation-for="Payment.ShippingAddress" class="text-danger"></span>
+                    <span asp-validation-for="User.Address" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="User.Zip"></label>
                     <input asp-for="User.Zip" class="form-control" />
-                    <span asp-validation-for="Payment.ZipCode" class="text-danger"></span>
+                    <span asp-validation-for="User.Zip" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="User.City"></label>
                     <input asp-for="User.City" class="form-control" />
-                    <span asp-validation-for="Payment.City" class="text-danger"></span>
+                    <span asp-validation-for="User.City" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="User.Email"></label>
                     <input asp-for="User.Email" class="form-control" />
-                    <span asp-validation-for="Payment.Email" class="text-danger"></span>
+                    <span asp-validation-for="User.Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="User.PhoneNumber"></label>
                     <input asp-for="User.PhoneNumber" class="form-control" />
-                    <span asp-validation-for="Payment.PhoneNumber" class="text-danger"></span>
+                    <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
                 </div>
             }
             else
             {
+                <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Payment.FirstName"></label>
                     <input asp-for="Payment.FirstName" class="form-control" />

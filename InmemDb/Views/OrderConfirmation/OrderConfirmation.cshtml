@@ -21,16 +21,13 @@
         </tr>
         <tr>
             <td style="font-family:cursive">
-                @foreach (var ingredient in await _ingredientService.GetIngredients(item.Dish.DishId))
+                @foreach (var ingredient in item.CartItemIngredient)
                 {
-                    @ingredient.Name<br />
+                    @ingredient.Ingredient.Name<br />
                 }
             </td>
         </tr>
-    <tr>
-        <th>@item.Dish.Price KR</th>
-    </tr>
 </table>
 }
-<br /><br /><br /><br /><br /><br /><br />
-<h3>Total : @_cartService.TotalPriceForCart(Model.Payment.CartId)</h3>
+<br /><br /><br /><br /><br /><br /><br /><br />
+<h3>Totalt : @_cartService.TotalPriceForCart(Model.Payment.CartId) KR</h3>

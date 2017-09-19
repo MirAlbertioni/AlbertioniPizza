@@ -35,23 +35,20 @@ namespace InmemDb.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (User.Identity.IsAuthenticated)
             {
-                if(ModelState.IsValid)
+                var newUser = new PaymentViewModel
                 {
-                    var newUser = new PaymentViewModel
+                    User = new ApplicationUser
                     {
-                        User = new ApplicationUser
-                        {
-                            Firstname = user.Firstname,
-                            Lastname = user.Lastname,
-                            Address = user.Address,
-                            Zip = user.Zip,
-                            City = user.City,
-                            Email = user.Email,
-                            PhoneNumber = user.PhoneNumber
-                        }
-                    };
-                    return View(newUser);
-                }
+                        Firstname = user.Firstname,
+                        Lastname = user.Lastname,
+                        Address = user.Address,
+                        Zip = user.Zip,
+                        City = user.City,
+                        Email = user.Email,
+                        PhoneNumber = user.PhoneNumber
+                    }
+                };
+                return View(newUser);
             }
 
             return View();
