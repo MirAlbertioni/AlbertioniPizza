@@ -92,8 +92,15 @@
             </tbody>
         </table>
         <div style="text-align:center;">
-            <a style="width:60%;" class="btn btn-primary" asp-controller="Account" asp-action="Login">Login or create a membership</a>
-            <a style="width:60%;" class="btn btn-primary" asp-controller="Payment" asp-action="Payment">Continue as guest</a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a class="btn btn-primary" asp-action="Payment" asp-controller="Payment">Buy</a>
+            }
+            else
+            {
+                <a style="width:60%;" class="btn btn-primary" asp-controller="Account" asp-action="Login">Login or create a membership</a>
+                <a style="width:60%;" class="btn btn-primary" asp-controller="Payment" asp-action="Payment">Continue as guest</a>
+            }
         </div>
     </div>
 </div>

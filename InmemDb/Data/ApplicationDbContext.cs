@@ -50,12 +50,15 @@ namespace InmemDb.Data
         public DbSet<Dish> Dishes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<DishIngredient> DishIngredients { get; set; }
-        public DbSet<Payment> Payment { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<CartItemIngredient> CartItemIngredients { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
-        public DbSet<OrderConfirmation> Order { get; set; }
+        public DbSet<Payment> Payment { get; set; }
+        public DbSet<PaymentViewModel> PaymentVM { get; set; }
+        public DbSet<OrderConfirmation> OrderConfirm { get; set; }
+        public DbSet<Order> Order { get; set; }
+        public DbSet<Register> Register { get; set; }
     }
 }

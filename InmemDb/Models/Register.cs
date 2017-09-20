@@ -6,30 +6,30 @@ using System.Threading.Tasks;
 
 namespace InmemDb.Models
 {
-    public class Payment
+    public class Register
     {
         [Key]
-        public int PaymentId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         [Display(Name = "Firstname")]
-        public string FirstName { get; set; }
+        public string Firstname { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         [Display(Name = "Lastname")]
-        public string LastName { get; set; }
-
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string Lastname { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
         [Display(Name = "Address")]
-        public string ShippingAddress { get; set; }
+        public string Address { get; set; }
+
+        [Required]
+        [StringLength(5, ErrorMessage = "The {0} must be {2} characters long.", MinimumLength = 5)]
+        [Display(Name = "Zipcode")]
+        public string Zip { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]
@@ -37,15 +37,15 @@ namespace InmemDb.Models
         public string City { get; set; }
 
         [Required]
-        [StringLength(5, ErrorMessage = "The {0} must be {2} characters long.", MinimumLength = 5)]
-        [Display(Name = "Zipcode")]
-        public string ZipCode { get; set; }
-
-        [Required]
         [Phone]
         [StringLength(10, ErrorMessage = "The {0} must be {2} characters long.", MinimumLength = 10)]
         [Display(Name = "Phone")]
         public string PhoneNumber { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 2)]

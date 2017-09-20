@@ -24,59 +24,39 @@ namespace InmemDb.Controllers
             _context = context;
         }
         // GET: OrderConfirmationGuest
-        public async Task<ActionResult> OrderConfirmation(int paymentId, OrderConfirmation order)
+        public async Task<ActionResult> OrderConfirmation(Register model)
         {
             var cartId = (int)HttpContext.Session.GetInt32("Cart");
-            var user = await _userManager.GetUserAsync(User);
-            
+            List<CartItem> cartItems;
 
-            if (User.Identity.IsAuthenticated)
-            {
-                var currentPayment = await _context.Payment.SingleOrDefaultAsync(x => x.PaymentId == paymentId);
-
-                var currentGuest = await _context.Payment
-                .Include(x => x.Cart)
-                .ThenInclude(x => x.CartItem)
+            var currentCart = _context.Register.Include(x => x.Cart)
+                .ThenInclude(i => i.CartItem)
                 .ThenInclude(x => x.CartItemIngredient)
-                .ThenInclude(x => x.Ingredient)
-                .Include(x => x.CartItem)
-                .ThenInclude(x => x.Dish)
-                .SingleOrDefaultAsync(x => x.PaymentId == currentPayment.PaymentId && x.CartId == cartId);
+                .ThenInclude(ig => ig.Ingredient)
+                .Include(i => i.CartItem)
+                .ThenInclude(ci => ci.Dish)
+                .SingleOrDefault(x => x.CartId == cartId);
 
-                var newOrder = new OrderConfirmation
-                {
-                    Payment = currentGuest
-                };
-
-                //var session = HttpContext.Session;
-                //session.Remove("Cart");
-                return View(newOrder);
-            }
-            else
+            cartItems = currentCart.CartItem;
+            if(User.Identity.IsAuthenticated)
             {
-                var currentGuest = await _context.Payment
-                .Include(x => x.Cart)
-                .ThenInclude(x => x.CartItem)
-                .ThenInclude(x => x.CartItemIngredient)
-                .ThenInclude(x => x.Ingredient)
-                .Include(x => x.CartItem)
-                .ThenInclude(x => x.Dish)
-                .SingleOrDefaultAsync(x => x.PaymentId == paymentId && x.CartId == cartId);
+                var user = await _userManager.GetUserAsync(User);
 
-                var currentCart = currentGuest.CartItem.ToList();
-
-                var newOrder = new OrderConfirmation
+                var newUser = new PaymentViewModel
                 {
-                    Payment = currentGuest
+                    Register = currentCart,
+                    Cart = currentCart.Cart,
+                    User = user
                 };
-
-                order = newOrder;
-
-                //var session = HttpContext.Session;
-                //session.Remove("Cart");
-
-                return View(newOrder);
+                return View(newUser);
             }
+            var newGuest = new PaymentViewModel
+            {
+                Register = model,
+                Cart = currentCart.Cart
+            };
+
+            return View(newGuest);
         }
     }
 }

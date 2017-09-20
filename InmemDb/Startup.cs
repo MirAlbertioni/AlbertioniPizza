@@ -18,21 +18,27 @@ namespace InmemDb
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             Configuration = configuration;
+            _environment = environment;
         }
 
         public IConfiguration Configuration { get; }
-
+        private readonly IHostingEnvironment _environment;
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddDbContext<ApplicationDbContext>(options =>
+            if(_environment.IsProduction() || _environment.IsStaging())
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            }
+            else
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase("DefaultConnection"));
+            }
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -91,6 +97,10 @@ namespace InmemDb
                     name: "default",
                     template: "{controller=Dish}/{action=Index}/{id?}");
             });
+            if(_environment.IsProduction() || _environment.IsStaging())
+            {
+                context.Database.Migrate();
+            }
             DbInitializer.Initializer(context, userManager, roleManager);
         }
     }

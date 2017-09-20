@@ -1,21 +1,21 @@
-﻿@model OrderConfirmation
+﻿@model PaymentViewModel
 @inject InmemDb.Services.IIngredientService _ingredientService
 @inject InmemDb.Services.ShoppingCartService _cartService
 
 <div style="margin-top:20px;">
-    Tack @Model.Payment.FirstName för ditt köp! Vi kommer skicka dina varor till <br /> 
-    @Model.Payment.ShippingAddress<br />
-    @Model.Payment.ZipCode<br />
-    asd @Model.Payment.City!<br /><br />
-    Du får ett sms skickad till <b>@Model.Payment.PhoneNumber</b> ca 30 minuter innan leverans.
+    Tack @Model.Register.Firstname för ditt köp! Vi kommer skicka dina varor till <br />
+    @Model.Register.Address<br />
+    @Model.Register.Zip<br />
+    @Model.Register.City!<br /><br />
+    Du får ett sms skickad till <b>@Model.Register.PhoneNumber</b> ca 30 minuter innan leverans.
     <br /><br />
-    En orderbekräftelse har skickats till @Model.Payment.Email!
+    En orderbekräftelse har skickats till @Model.Register.Email!
     <br />
     Här nedan visas ditt köp.<br /><br />
 </div>
-@foreach (var item in Model.Payment.CartItem)
+@foreach (var item in Model.Cart.CartItem)
 {
-<table class="col-lg-2">
+    <table class="col-lg-2">
         <tr>
             <th>@item.Dish.Name</th>
         </tr>
@@ -23,11 +23,28 @@
             <td style="font-family:cursive">
                 @foreach (var ingredient in item.CartItemIngredient)
                 {
-                    @ingredient.Ingredient.Name<br />
+                    @ingredient.Ingredient.Name <br />
                 }
             </td>
         </tr>
-</table>
-}
-<br /><br /><br /><br /><br /><br /><br /><br />
-<h3>Totalt : @_cartService.TotalPriceForCart(Model.Payment.CartId) KR</h3>
+        <tr>
+            <th>@{
+                decimal totPrice = 0;
+
+                totPrice += item.Dish.Price;
+
+                foreach (var c in item.CartItemIngredient)
+                {
+                    if (_cartService.EnabledIngredientIsNull(item.Dish.DishId, c.IngredientId))
+                    {
+                        c.CartItemIngredientPrice = 0;
+                    }
+                    totPrice += c.CartItemIngredientPrice;
+                }
+            }
+            @totPrice KR</th>
+        </tr>
+    </table>
+                }
+<br /><br /><br /><br /><br /><br /><br />
+<h3>Total : @_cartService.TotalPriceForCart(Model.Register.CartId)</h3>
